@@ -2,6 +2,15 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Kairo Supply: a sealed, evidence-first registry and market for fossils and mineral specimens.">
 <link rel="canonical" href="https://kairo.supply/">
+<meta name="theme-color" content="#060912">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Crect width='26' height='26' rx='6' fill='%23060912'/%3E%3Ccircle cx='13' cy='13' r='9' fill='none' stroke='%23A9B2C6' stroke-width='1.6'/%3E%3Ccircle cx='13' cy='13' r='4.5' fill='none' stroke='%23B3DE53' stroke-width='1.8'/%3E%3Ccircle cx='19.5' cy='8.5' r='1.8' fill='%23D6E3FF'/%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kairo Supply">
+<meta property="og:title" content="Kairo Supply">
+<meta property="og:description" content="Sealed, evidence-first records for fossils and mineral specimens. First record: KR-0001, a spinosaurid tooth from the Kem Kem beds of Morocco.">
+<meta property="og:url" content="https://kairo.supply/">
+<meta property="og:image" content="https://kairo.supply/media/kr-0001/p17.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400&family=Geist:wght@300;400;500;600&display=swap">
@@ -293,6 +302,81 @@ dialog.pal::backdrop { background: rgba(3, 5, 10, .6); backdrop-filter: blur(3px
 
 footer { padding-block: 3rem; color: var(--ink-3); font-size: .86rem; border-top: 1px solid var(--line); }
 footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; }
+/* Clock readout as HTML so it stays legible at any size */
+.clock-stage { position: relative; }
+.readout { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 40%; display: grid; justify-items: center; text-align: center; gap: .1rem; pointer-events: none; }
+.readout b { font-family: var(--display); font-weight: 200; font-size: clamp(2rem, 5.6vw, 3.6rem); line-height: 1; font-variant-numeric: tabular-nums; }
+.readout span { color: var(--ink-2); font-size: clamp(.7rem, 1.5vw, .85rem); }
+.readout strong { font-weight: 500; font-size: clamp(.78rem, 1.8vw, .98rem); margin-top: .35rem; line-height: 1.25; text-wrap: balance; }
+.readout em { font-style: normal; color: var(--ink-3); font-size: clamp(.68rem, 1.4vw, .8rem); font-variant-numeric: tabular-nums; }
+.readout i { font-style: normal; color: var(--star); font-size: clamp(.72rem, 1.5vw, .85rem); min-height: 1.3em; margin-top: .15rem; }
+
+/* Time slider: the track is the Phanerozoic, in ICS colors */
+.scrub { margin: 1.1rem auto 0; max-width: 560px; display: grid; gap: .9rem; }
+.scrub-ends { display: flex; justify-content: space-between; color: var(--ink-3); font-size: .8rem; margin-top: -.5rem; }
+.scrub input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 32px; background: transparent; cursor: pointer; margin: 0; }
+.scrub input[type="range"]::-webkit-slider-runnable-track { height: 8px; border-radius: 8px; background: var(--track, var(--line)); }
+.scrub input[type="range"]::-moz-range-track { height: 8px; border-radius: 8px; background: var(--track, var(--line)); }
+.scrub input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; margin-top: -9px; border-radius: 50%; background: var(--void); border: 2px solid var(--star); box-shadow: 0 0 14px var(--glow); }
+.scrub input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--void); border: 2px solid var(--star); box-shadow: 0 0 14px var(--glow); }
+.jumps { display: flex; flex-wrap: wrap; gap: .45rem; justify-content: center; }
+.jumps button { font: 400 .84rem var(--body); color: var(--ink-2); background: var(--glass); border: 1px solid var(--line); border-radius: 999px; padding: .5rem .85rem; cursor: pointer; min-height: 38px; }
+.jumps button:hover { color: var(--ink); border-color: var(--line-2); }
+.jumps button[aria-pressed="true"] { color: var(--void); background: var(--star); border-color: var(--star); }
+
+/* Finding-to-plate links */
+.refs { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .5rem; }
+.refs button { font: 500 .76rem var(--body); color: var(--star); background: var(--glass); border: 1px solid var(--line); border-radius: 999px; padding: .3rem .65rem; cursor: pointer; min-height: 30px; }
+.refs button:hover { border-color: var(--star); }
+
+/* Earth's day */
+.daycard { margin-top: 1rem; padding: 1.4rem 1.6rem; display: grid; gap: .35rem; }
+.daycard b { font-family: var(--display); font-weight: 200; font-size: clamp(1.9rem, 5vw, 2.8rem); line-height: 1.1; font-variant-numeric: tabular-nums; }
+.daycard p { color: var(--ink-2); font-weight: 300; max-width: var(--measure); }
+
+.btn.sm { padding: .6rem 1rem; font-size: .88rem; }
+.rec-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.stage img { touch-action: pan-y; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; cursor: zoom-in; }
+.stage .hint { position: absolute; top: 12px; right: 12px; font-size: .75rem; color: var(--ink-2); background: rgba(6, 9, 18, .62); border: 1px solid var(--line); border-radius: 999px; padding: .3rem .7rem; pointer-events: none; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+
+/* Full-screen viewer */
+dialog.lb { padding: 0; border: 0; margin: 0; inset: 0; width: 100vw; height: 100vh; height: 100dvh; max-width: none; max-height: none; background: #03050A; color: var(--ink); overflow: hidden; }
+dialog.lb::backdrop { background: #03050A; }
+.lb-scroll { position: absolute; left: 0; right: 0; top: env(safe-area-inset-top, 0px); bottom: calc(68px + env(safe-area-inset-bottom, 0px)); overflow: auto; display: grid; place-items: center; overscroll-behavior: contain; }
+.lb-scroll img { display: block; width: 100%; height: 100%; object-fit: contain; cursor: zoom-in; -webkit-user-select: none; user-select: none; }
+.lb-scroll.zoomed { place-items: start; }
+.lb-scroll.zoomed img { width: 280%; height: auto; max-width: none; object-fit: initial; cursor: zoom-out; }
+.lb-bar { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 12px max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); border-top: 1px solid var(--line); background: rgba(6, 9, 18, .9); }
+.lb-bar span { font-size: .92rem; color: var(--ink-2); min-width: 0; }
+
+/* Bottom tab bar on phones */
+.tabbar { display: none; }
+@media (max-width: 700px) {
+  .nav, .search { display: none; }
+  .top .wrap { min-height: 58px; }
+  .tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; display: grid; grid-template-columns: repeat(4, 1fr); padding: 6px max(10px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px)); background: rgba(6, 9, 18, .88); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-top: 1px solid var(--line); }
+  .tabbar a, .tabbar button { display: grid; justify-items: center; align-content: center; gap: 3px; font: 500 .7rem var(--body); color: var(--ink-3); background: none; border: 0; padding: 6px 0; border-radius: 12px; cursor: pointer; min-height: 50px; }
+  .tabbar svg { width: 22px; height: 22px; }
+  .tabbar [aria-current="true"] { color: var(--ink); }
+  .tabbar [aria-current="true"] svg { filter: drop-shadow(0 0 6px var(--glow)); }
+  body { padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px)); }
+  .hero { padding-top: 1.6rem; gap: 1.6rem; }
+  .hero-meta { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+  .hero-meta b { font-size: 1.35rem; }
+  .actions .btn { flex: 1 1 auto; justify-content: center; }
+  .stage { border-radius: 16px; }
+  .cap { left: 10px; right: 10px; bottom: 10px; }
+  .cap .glass { padding: .5rem .75rem; }
+  .cap .pt { font-size: .88rem; }
+  .navbtns button { width: 38px; height: 38px; }
+  .film button { width: 76px; }
+  .id-card, .plate-card, .prog, .three > div, .two > div, .two-col > div, .seal, .entry, .daycard { padding: 1.2rem; }
+  .catno { font-size: 2.6rem; }
+  section.band { padding-block: 3rem; }
+  .sec-head { margin-bottom: 1.6rem; }
+  .lb-bar .navbtns button { width: 44px; height: 44px; }
+}
+@media (max-width: 560px) { .clock .rl, .clock .in { display: none; } .legend { font-size: .78rem; gap: .4rem 1rem; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
 </style>
 
@@ -325,14 +409,25 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
         <a class="btn ghost" href="#registry" data-go="registry">Browse the registry</a>
       </div>
       <div class="hero-meta">
-        <div><b>1</b><span>Sealed record</span></div>
-        <div><b>18</b><span>Fingerprinted files</span></div>
-        <div><b>6</b><span>Objects awaiting</span></div>
+        <div><b id="m-sealed">1</b><span>Sealed record</span></div>
+        <div><b id="m-files">18</b><span>Sealed images and video</span></div>
+        <div><b id="m-await">6</b><span>Objects awaiting</span></div>
       </div>
     </div>
     <div class="clock-wrap">
-      <div id="clock-box"></div>
+      <div class="clock-stage"><div id="clock-box"></div><div class="readout" aria-hidden="true"><b id="ro-num">97</b><span>million years ago</span><strong id="ro-per"></strong><em id="ro-day"></em><i id="ro-obj"></i></div></div>
       <div class="legend" aria-hidden="true"><span><i class="t1"></i>All of Earth's history</span><span><i></i>The last 539 million years</span><span><i class="t3"></i>The Cretaceous</span></div>
+      <div class="scrub">
+        <input type="range" id="scrub" min="0" max="5388" step="1" aria-label="Move through the last 539 million years">
+        <div class="scrub-ends" aria-hidden="true"><span>539 million years ago</span><span>Today</span></div>
+        <div class="jumps" role="group" aria-label="Jump to a moment">
+          <button type="button" data-ma="530" aria-pressed="false">Cambrian explosion</button>
+          <button type="button" data-ma="251.9" aria-pressed="false">The Great Dying</button>
+          <button type="button" data-ma="97" aria-pressed="false">KR-0001</button>
+          <button type="button" data-ma="66" aria-pressed="false">End of the dinosaurs</button>
+          <button type="button" data-ma="0.3" aria-pressed="false">Our species</button>
+        </div>
+      </div>
       <div class="ro-open" id="ro-open"></div>
     </div>
   </div>
@@ -397,7 +492,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
   <div class="wrap">
     <div class="rec-top">
       <a class="back" href="#registry" data-go="registry"><span aria-hidden="true">‹</span> Registry</a>
-      <span class="quiet" style="font-size:.88rem">Record opened 21 October 2026</span>
+      <div class="rec-actions"><span class="quiet" style="font-size:.88rem">Record opened 21 October 2026</span><button class="btn ghost sm" type="button" id="share">Share record</button></div>
     </div>
     <div class="rec-grid">
       <div>
@@ -405,9 +500,10 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
           <img id="stage-img" src="media/kr-0001/p01.jpg" alt="" width="1600" height="1200">
           <video id="stage-vid" controls muted playsinline preload="none" poster="media/kr-0001/v01-poster.jpg" width="1280" height="960" hidden><source src="media/kr-0001/v01.mp4" type="video/mp4"></video>
           <div class="lens" id="lens" hidden></div>
+          <span class="hint" id="stage-hint">Hover to magnify. Click for full screen.</span>
           <div class="cap">
             <div class="glass"><div class="pn" id="cap-no"></div><div class="pt" id="cap-t"></div></div>
-            <div class="navbtns"><button type="button" id="prev" aria-label="Previous plate">‹</button><button type="button" id="next" aria-label="Next plate">›</button></div>
+            <div class="navbtns"><button type="button" id="prev" aria-label="Previous plate">‹</button><button type="button" id="next" aria-label="Next plate">›</button><button type="button" id="expand" aria-label="View full screen">⤢</button></div>
           </div>
         </figure>
         <div class="film" id="film" role="list" aria-label="Plates"></div>
@@ -455,6 +551,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
     <div class="wrap">
       <div class="sec-head"><h2 id="time-h">Place in time</h2><p class="lede">The Kem Kem beds date to the Cenomanian, the first stage of the Late Cretaceous, about 30 million years before the end-Cretaceous extinction.</p></div>
       <div class="timebox glass" id="mini-box"></div>
+      <div class="daycard glass" id="daycard"></div>
     </div>
   </section>
 
@@ -485,6 +582,18 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 
 <footer><div class="wrap"><span>Kairo Supply, Austin, Texas. kairo.supply</span><span>Records and images &copy; 2026 Kairo Supply</span></div></footer>
 </div>
+
+<nav class="tabbar" aria-label="Main">
+  <a href="#top" data-go="top"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="18.4" cy="7.5" r="1.6" fill="currentColor"/></svg>Explore</a>
+  <a href="#registry" data-go="registry"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M5 12h14M5 17h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>Registry</a>
+  <a href="#market" data-go="market"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h13l-3-3M20 15H7l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>Market</a>
+  <button type="button" id="open-pal2"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M15 15l4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Search</button>
+</nav>
+
+<dialog class="lb" id="lb" aria-label="Full-screen plate viewer">
+  <div class="lb-scroll" id="lb-scroll"><img id="lb-img" alt="" width="1600" height="1200"></div>
+  <div class="lb-bar"><span id="lb-cap"></span><div class="navbtns"><button type="button" id="lb-prev" aria-label="Previous plate">‹</button><button type="button" id="lb-next" aria-label="Next plate">›</button><button type="button" id="lb-close" aria-label="Close full screen">✕</button></div></div>
+</dialog>
 
 <dialog class="pal" id="pal" aria-label="Search">
   <label class="field" for="pal-q"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" style="color:var(--ink-3)"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><input id="pal-q" type="text" placeholder="Search objects, localities, or jump to a section" autocomplete="off" role="combobox" aria-controls="pal-list" aria-expanded="true"></label>
@@ -598,21 +707,25 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
     const handG = s("g"); handG.append(hand, knob, knob2);
     svg.append(handG);
     svg.append(s("circle", { cx: C, cy: C, r: 160, fill: "#060912", opacity: .55 }));
-    const ro1 = s("text", { x: C, y: C - 18, class: "ro-num", "text-anchor": "middle" });
-    const ro2 = s("text", { x: C, y: C + 14, class: "ro-unit", "text-anchor": "middle" }, "million years ago");
-    const ro3 = s("text", { x: C, y: C + 46, class: "ro-per", "text-anchor": "middle" });
-    const ro4 = s("text", { x: C, y: C + 72, class: "ro-obj", "text-anchor": "middle" });
-    svg.append(ro1, ro2, ro3, ro4);
-    return { svg, hand, knob, knob2, ro1, ro3, ro4 };
+    return { svg, hand, knob, knob2 };
   }
   const clock = buildClock();
   $("#clock-box").append(clock.svg);
   const roOpen = $("#ro-open");
   const openBtn = h("a", { class: "btn ghost", href: "#kr-0001", "data-go": "kr-0001", text: "Open KR-0001" });
-  let ma = 97;
+  let ma = 97, lastNear = null, dragging = false;
+  const scrub = $("#scrub");
+  // Earth's history squeezed into one day: 4,567 million years = 24 hours.
+  function earthTime(m) {
+    if (m < 0.0005) return "Midnight";
+    const secs = 86400 - m / 4567 * 86400;
+    const hh = Math.floor(secs / 3600), mm = Math.floor(secs % 3600 / 60), ss = Math.floor(secs % 60);
+    const h12 = ((hh + 11) % 12) + 1, ap = hh >= 12 ? "pm" : "am", p2 = (n) => String(n).padStart(2, "0");
+    return m < 5 ? `${h12}:${p2(mm)}:${p2(ss)} ${ap}` : `${h12}:${p2(mm)} ${ap}`;
+  }
   const periodAt = (m) => PERIODS.find((p) => m <= p[2] && m >= p[3]) || PERIODS[0];
   const stageAt = (m) => STAGES.find((p) => m <= p[2] && m >= p[3]);
-  function setTime(m) {
+  function setTime(m, fromSlider) {
     ma = Math.max(0, Math.min(538.8, m));
     const [rm, , m0, m1] = RING.mid, [ri, , i0, i1] = RING.inner;
     const a = ang(ma, m0, m1);
@@ -622,15 +735,31 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
     const inK = ma <= 143.1 && ma >= 66;
     clock.knob2.style.display = inK ? "" : "none";
     if (inK) { const [x2, y2] = pt(ri, ang(ma, i0, i1)); clock.knob2.setAttribute("cx", x2.toFixed(1)); clock.knob2.setAttribute("cy", y2.toFixed(1)); }
-    clock.ro1.textContent = ma >= 10 ? Math.round(ma) : ma >= 1 ? ma.toFixed(1) : ma.toFixed(2);
+    const num = ma >= 10 ? String(Math.round(ma)) : ma >= 1 ? ma.toFixed(1) : ma.toFixed(2);
     const p = periodAt(ma), st = inK ? stageAt(ma) : null;
-    clock.ro3.textContent = st && st[0] !== "Early Cretaceous" ? `${st[0]}, ${p[0]}` : st ? st[0] : p[0];
+    const per = st && st[0] !== "Early Cretaceous" ? `${st[0]}, ${p[0]}` : st ? st[0] : p[0];
     const near = OBJECTS.find((o) => Math.abs(o.ma - ma) <= 3.5);
-    clock.ro4.textContent = near ? `${near.id} ${near.title}` : "";
+    $("#ro-num").textContent = num;
+    $("#ro-per").textContent = per;
+    $("#ro-day").textContent = `${earthTime(ma)} on Earth's day`;
+    $("#ro-obj").textContent = near ? `${near.id} ${near.title}` : "";
     roOpen.replaceChildren(...(near ? [openBtn] : []));
-    clock.svg.setAttribute("aria-valuenow", ma.toFixed(1));
-    clock.svg.setAttribute("aria-valuetext", `${clock.ro1.textContent} million years ago, ${clock.ro3.textContent}${near ? ", " + near.id : ""}`);
+    if (near && near !== lastNear && dragging && navigator.vibrate) { try { navigator.vibrate(10); } catch {} }
+    lastNear = near || null;
+    if (!fromSlider) scrub.value = String(Math.round((538.8 - ma) * 10));
+    document.querySelectorAll(".jumps button").forEach((b) => b.setAttribute("aria-pressed", String(Math.abs(+b.dataset.ma - ma) < 0.05)));
+    const v = `${num} million years ago, ${per}${near ? ", " + near.id : ""}`;
+    clock.svg.setAttribute("aria-valuenow", ma.toFixed(1)); clock.svg.setAttribute("aria-valuetext", v);
+    scrub.setAttribute("aria-valuetext", v);
   }
+  // Slider track painted with the periods, oldest on the left
+  scrub.style.setProperty("--track", "linear-gradient(90deg," + PERIODS.map(([, , a, b, c]) => `${c} ${((538.8 - a) / 538.8 * 100).toFixed(2)}%, ${c} ${((538.8 - b) / 538.8 * 100).toFixed(2)}%`).join(",") + ")");
+  scrub.addEventListener("input", () => {
+    let m = 538.8 - scrub.value / 10;
+    const near = OBJECTS.find((o) => Math.abs(o.ma - m) <= 2); if (near) m = near.ma;
+    setTime(m, true);
+  });
+  document.querySelectorAll(".jumps button").forEach((b) => b.addEventListener("click", () => setTime(+b.dataset.ma)));
   setTime(97);
   function fromPointer(e) {
     const p = clock.svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY;
@@ -642,7 +771,6 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
     const near = OBJECTS.find((o) => Math.abs(o.ma - m) <= 4); if (near) m = near.ma;
     return { m, r: Math.hypot(dx, dy) };
   }
-  let dragging = false;
   clock.svg.addEventListener("pointerdown", (e) => {
     if (e.target.classList.contains("star")) return;
     const { m, r } = fromPointer(e); if (r < 150 || r > 400) return;
@@ -660,6 +788,9 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
   clock.svg.addEventListener("click", (e) => { if (e.target.classList.contains("star")) go(e.target.dataset.link, true); });
 
   /* ---------- Home content ---------- */
+  $("#m-sealed").textContent = K.collection.filter((c) => c.status === "documenting").length;
+  $("#m-files").textContent = new Set(K.ledger.flatMap((e) => (e.body.files || []).filter((f) => f.path).map((f) => f.path))).size;
+  $("#m-await").textContent = K.collection.filter((c) => c.status === "awaiting").length;
   for (const [k, v] of [["Locality", R.locality], ["Age", R.ageText], ["Source", R.source], ["Status", "Documentation, step 1 of 5"]]) $("#feat-facts").append(h("dt", { text: k }), h("dd", { text: v }));
   let regFilter = "all";
   function renderReg() {
@@ -692,7 +823,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 
   const items = [...R.plates.map((p, i) => ({ ...p, n: i + 1 })), { ...R.video, kind: "reference", isVideo: true }];
   const KIND = { natural: "Sign of a natural fossil", condition: "Condition", reference: "Reference frame" };
-  const img = $("#stage-img"), vid = $("#stage-vid"), lens = $("#lens"), stage = $("#stage"), film = $("#film");
+  const img = $("#stage-img"), vid = $("#stage-vid"), lens = $("#lens"), stage = $("#stage"), film = $("#film"), lb = $("#lb");
   let cur = 0;
   items.forEach((it, i) => {
     const b = h("button", { type: "button", role: "listitem", "aria-label": it.isVideo ? "Video: " + it.title : `Plate ${it.n}: ${it.title}` });
@@ -715,26 +846,96 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
     $("#cap-t").textContent = it.title;
     $("#pl-kind").replaceChildren(h("span", { class: "dot " + it.kind }), KIND[it.kind]);
     $("#pl-text").textContent = it.text;
+    if (lb.open && !it.isVideo && typeof syncLb === "function") syncLb();
   }
   $("#prev").addEventListener("click", () => show(cur - 1));
   $("#next").addEventListener("click", () => show(cur + 1));
   stage.addEventListener("keydown", (e) => { if (e.key === "ArrowRight") { show(cur + 1); e.preventDefault(); } if (e.key === "ArrowLeft") { show(cur - 1); e.preventDefault(); } });
-  if (matchMedia("(pointer: fine)").matches) {
-    const ZOOM = 3;
-    img.addEventListener("pointermove", (e) => {
-      const r = img.getBoundingClientRect(), sr = stage.getBoundingClientRect();
-      const x = e.clientX - r.left, y = e.clientY - r.top;
-      lens.hidden = false;
-      lens.style.left = (e.clientX - sr.left) + "px"; lens.style.top = (e.clientY - sr.top) + "px";
-      lens.style.backgroundImage = `url("${img.currentSrc || img.src}")`;
-      lens.style.backgroundSize = `${r.width * ZOOM}px ${r.height * ZOOM}px`;
-      lens.style.backgroundPosition = `${-(x * ZOOM - 95)}px ${-(y * ZOOM - 95)}px`;
-    });
-    img.addEventListener("pointerleave", () => (lens.hidden = true));
+  const ZOOM = 3, fine = matchMedia("(pointer: fine)").matches;
+  if (!fine) $("#stage-hint").textContent = "Swipe to browse. Hold to magnify.";
+  function lensAt(px, py, offY) {
+    const r = img.getBoundingClientRect(), sr = stage.getBoundingClientRect();
+    const x = px - r.left, y = py - r.top;
+    lens.hidden = false;
+    lens.style.left = (px - sr.left) + "px"; lens.style.top = (py - sr.top + offY) + "px";
+    lens.style.backgroundImage = `url("${img.currentSrc || img.src}")`;
+    lens.style.backgroundSize = `${r.width * ZOOM}px ${r.height * ZOOM}px`;
+    lens.style.backgroundPosition = `${-(x * ZOOM - 95)}px ${-(y * ZOOM - 95)}px`;
   }
+  let down = null, holdT = 0, holding = false;
+  img.addEventListener("pointerdown", (e) => {
+    down = { x: e.clientX, y: e.clientY, t: Date.now() };
+    if (e.pointerType !== "mouse") holdT = setTimeout(() => { holding = true; lensAt(down.x, down.y, -115); }, 300);
+  });
+  img.addEventListener("pointermove", (e) => {
+    if (e.pointerType === "mouse") { lensAt(e.clientX, e.clientY, 0); return; }
+    if (!down) return;
+    if (holding) { lensAt(e.clientX, e.clientY, -115); return; }
+    if (Math.hypot(e.clientX - down.x, e.clientY - down.y) > 10) clearTimeout(holdT);
+  });
+  img.addEventListener("pointerup", (e) => {
+    clearTimeout(holdT);
+    if (!down) return;
+    const dx = e.clientX - down.x, dy = e.clientY - down.y;
+    if (holding) { holding = false; lens.hidden = true; }
+    else if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.3) show(cur + (dx < 0 ? 1 : -1));
+    else if (Math.hypot(dx, dy) < 8 && Date.now() - down.t < 450) openLb();
+    down = null;
+  });
+  img.addEventListener("pointercancel", () => { clearTimeout(holdT); holding = false; lens.hidden = true; down = null; });
+  img.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") lens.hidden = true; });
+  img.addEventListener("contextmenu", (e) => e.preventDefault());
+
+  // Full-screen viewer
+  const lbImg = $("#lb-img"), lbScroll = $("#lb-scroll");
+  function syncLb() {
+    const it = items[cur];
+    lbImg.src = `media/kr-0001/${it.id}.jpg`; lbImg.alt = `Plate ${it.n}: ${it.title}`;
+    $("#lb-cap").textContent = `Plate ${it.n} of ${R.plates.length}. ${it.title}`;
+    lbScroll.classList.remove("zoomed");
+  }
+  function openLb() { if (items[cur].isVideo) return; syncLb(); lb.showModal(); }
+  function lbStep(d) { let n = cur; do { n = (n + d + items.length) % items.length; } while (items[n].isVideo); show(n); }
+  $("#expand").addEventListener("click", () => (items[cur].isVideo ? null : openLb()));
+  $("#lb-close").addEventListener("click", () => lb.close());
+  $("#lb-prev").addEventListener("click", () => lbStep(-1));
+  $("#lb-next").addEventListener("click", () => lbStep(1));
+  lb.addEventListener("keydown", (e) => { if (e.key === "ArrowRight") lbStep(1); if (e.key === "ArrowLeft") lbStep(-1); });
+  let lbDown = null;
+  lbImg.addEventListener("pointerdown", (e) => (lbDown = { x: e.clientX, y: e.clientY }));
+  lbImg.addEventListener("pointerup", (e) => {
+    if (!lbDown) return;
+    const dx = e.clientX - lbDown.x, dy = e.clientY - lbDown.y; lbDown = null;
+    const zoomed = lbScroll.classList.contains("zoomed");
+    if (!zoomed && Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.3) { lbStep(dx < 0 ? 1 : -1); return; }
+    if (Math.hypot(dx, dy) > 8) return;
+    if (zoomed) { lbScroll.classList.remove("zoomed"); return; }
+    const r = lbImg.getBoundingClientRect();
+    const fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+    lbScroll.classList.add("zoomed");
+    requestAnimationFrame(() => {
+      lbScroll.scrollLeft = fx * lbScroll.scrollWidth - lbScroll.clientWidth / 2;
+      lbScroll.scrollTop = fy * lbScroll.scrollHeight - lbScroll.clientHeight / 2;
+    });
+  });
   show(0);
 
-  for (const [id, list] of [["#f-natural", R.findings.natural], ["#f-condition", R.findings.condition], ["#f-open", R.findings.open]]) for (const t of list) $(id).append(h("li", { text: t }));
+  // Which plates show each finding (presentation only; the sealed record is unchanged).
+  const REFS = { natural: [["p01", "p04"], ["p17", "p12"], ["p06", "p08", "p09"], ["p10", "p06"], ["p11", "p07", "p15"]], condition: [["p03", "p02"], ["p04", "p13"], ["p02", "p06"], ["p07"]], open: [["p02"], [], []] };
+  for (const [key, id] of [["natural", "#f-natural"], ["condition", "#f-condition"], ["open", "#f-open"]]) R.findings[key].forEach((t, i) => {
+    const li = h("li", {}, t), refs = REFS[key][i] || [];
+    if (refs.length) {
+      const box = h("span", { class: "refs" });
+      for (const pid of refs) {
+        const idx = items.findIndex((x) => x.id === pid);
+        const b = h("button", { type: "button", text: "See plate " + (idx + 1), "aria-label": `See plate ${idx + 1}, ${items[idx].title}` });
+        b.addEventListener("click", () => { show(idx); stage.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" }); });
+        box.append(b);
+      }
+      li.append(box);
+    }
+    $(id).append(li);
+  });
   const LEVEL = { 4: "Strong", 3: "Likely", 2: "Uncertain", 1: "Weak", 0: "Not yet tested" };
   for (const c of R.confidence) {
     const fill = h("i", {}); fill.style.width = (c.level / 4 * 100) + "%";
@@ -757,6 +958,19 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
     svg.append(s("text", { x: Wd - 2, y: 22, "text-anchor": "end", style: "fill:#6E788E;font-size:12px" }, "End-Cretaceous extinction"));
     $("#mini-box").append(svg);
   })();
+
+  $("#daycard").replaceChildren(
+    h("span", { class: "quiet", text: "If all of Earth's history were a single day, this animal was alive at" }),
+    h("b", { text: earthTime(97) }),
+    h("p", { text: `The dinosaurs vanish at ${earthTime(66)}. Our species turns up at ${earthTime(0.3)}, about six seconds before midnight.` }));
+
+  $("#share").addEventListener("click", async (ev) => {
+    const btn = ev.currentTarget, it = items[cur];
+    const url = "https://kairo.supply/#kr-0001" + (it.isVideo || cur === 0 ? "" : "-" + it.id);
+    try { if (navigator.share) { await navigator.share({ title: "KR-0001 Spinosaurid tooth, Kairo Supply", url }); return; } } catch (e) { if (e && e.name === "AbortError") return; }
+    try { await navigator.clipboard.writeText(url); btn.textContent = "Link copied"; } catch { btn.textContent = url.replace("https://", ""); }
+    setTimeout(() => (btn.textContent = "Share record"), 2600);
+  });
 
   for (const m of R.measurements) $("#meas").append(h("div", { class: "glass" }, h("span", { text: `${m.name} (${m.unit})` }), h("b", { text: "Pending" })));
   for (const c of R.care) $("#care").append(h("li", { text: c }));
@@ -829,6 +1043,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
   }
   function openPal() { palQ.value = ""; sel = 0; renderPal(); pal.showModal(); palQ.focus(); }
   $("#open-pal").addEventListener("click", openPal);
+  $("#open-pal2").addEventListener("click", openPal);
   addEventListener("keydown", (e) => { if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); pal.open ? pal.close() : openPal(); } else if (e.key === "/" && !pal.open && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) { e.preventDefault(); openPal(); } });
   palQ.addEventListener("input", () => { sel = 0; renderPal(); });
   palQ.addEventListener("keydown", (e) => {
@@ -841,14 +1056,18 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
   /* ---------- Views ---------- */
   const home = $("#view-home"), rec = $("#view-record");
   function go(token, push) {
+    const plate = /^kr-0001-(p\d\d)$/.exec(token);
+    if (plate) { const idx = items.findIndex((x) => x.id === plate[1]); if (idx >= 0) show(idx); token = "kr-0001"; }
     const isRec = token === "kr-0001";
     home.hidden = isRec; rec.hidden = !isRec;
-    document.querySelectorAll(".nav a").forEach((a) => a.setAttribute("aria-current", String(a.dataset.go === token)));
+    document.querySelectorAll(".nav a, .tabbar a").forEach((a) => a.setAttribute("aria-current", String(a.dataset.go === token)));
     if (push) { try { history.replaceState(null, "", "#" + token); } catch {} }
     if (isRec || token === "top") scrollTo(0, 0); else document.getElementById(token)?.scrollIntoView();
   }
   document.addEventListener("click", (e) => { const a = e.target.closest("[data-go]"); if (!a) return; e.preventDefault(); go(a.dataset.go, true); });
   const start = location.hash.slice(1);
-  if (["kr-0001", "registry", "market", "method"].includes(start)) go(start, false);
+  const valid = (t) => ["top", "kr-0001", "registry", "market", "method"].includes(t) || /^kr-0001-p\d\d$/.test(t);
+  if (valid(start)) go(start, false);
+  addEventListener("hashchange", () => { const t = location.hash.slice(1); if (valid(t)) go(t, false); else if (!t) go("top", false); });
 })();
 </script>
