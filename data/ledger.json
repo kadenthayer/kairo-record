@@ -1,0 +1,217 @@
+[
+  {
+    "prev": "0000000000000000000000000000000000000000000000000000000000000000",
+    "hash": "72fee9b0d4c48e3c4a0e34aec2d88f3013576d8733b8f24aeea683b8916c216c",
+    "body": {
+      "seq": 1,
+      "date": "2026-10-20",
+      "type": "Micro-imaging session",
+      "record": "KR-0001",
+      "instrument": "Dino-Lite AM7115MZT",
+      "files": [
+        {
+          "name": "p01",
+          "px": "2592x1944",
+          "sha256": "83967c1b893bb15d5bbd795f844cf4501947d95646531306b9ea19add88c010f"
+        },
+        {
+          "name": "p02",
+          "px": "2592x1944",
+          "sha256": "f42fc43cbbdd25a43d8e10e297c9fc764d662e7ddb8c1620ed032a330d80108b"
+        },
+        {
+          "name": "p03",
+          "px": "2592x1944",
+          "sha256": "c686872cbee12334dc2cf72755b8a0df90435b94794d9388b0071e1a17f96aab"
+        },
+        {
+          "name": "p04",
+          "px": "2592x1944",
+          "sha256": "4722a59c5ae447f1688bc0d939f1db4e3dc910dd41f89fb339d1f6c14f68a076"
+        },
+        {
+          "name": "p05",
+          "px": "2592x1944",
+          "sha256": "0b54114fd1fb960096a59d05055e096dc3660bf4334a3cab8cc4a651b7d574d2"
+        },
+        {
+          "name": "p06",
+          "px": "2592x1944",
+          "sha256": "6ebfeff1e581ab57e178c6676cae984b9b7e2c7158704bab01385caeec114dc6"
+        },
+        {
+          "name": "p07",
+          "px": "2592x1944",
+          "sha256": "98f75cbef5c20adeb6153333c4b4516d2129ee1e4cc7f9db57ddfdb38a3c912e"
+        },
+        {
+          "name": "p08",
+          "px": "2592x1944",
+          "sha256": "99dd57b114798d9f48b0e4eda203fcac73a56934a4f2cd580bd802c0d2f0ca7d"
+        },
+        {
+          "name": "p09",
+          "px": "2592x1944",
+          "sha256": "be6031ce098684474d4c3b4e3ad099a3cfde67a73180a10c3a13a95a9ff5cb0e"
+        },
+        {
+          "name": "p10",
+          "px": "2592x1944",
+          "sha256": "862398dc513a5cef904525b3fa4fcbe5d21264d4ca7a7555cd25685fad6ea4f9"
+        },
+        {
+          "name": "p11",
+          "px": "2592x1944",
+          "sha256": "e11b0d38960c76a18f6e31400a7de1a5e80fd99f737dc2ce745da3aee61bde16"
+        },
+        {
+          "name": "p12",
+          "px": "2592x1944",
+          "sha256": "7600b7610a73f4649b25aca0370f48df46e658d481594448ddcc48545b766b1e"
+        },
+        {
+          "name": "p13",
+          "px": "2592x1944",
+          "sha256": "3f8f24334f5cefd2773343ababc006bd02126fbe36b078093376949395ccf705"
+        },
+        {
+          "name": "p14",
+          "px": "2592x1944",
+          "sha256": "5daad946d8b96ad8acb2b964d1baf640da7edbcc075f4900566353b458fbf8d4"
+        },
+        {
+          "name": "p15",
+          "px": "2592x1944",
+          "sha256": "e7140af46061ace916ed0bf7d61274c31c96d4ef4606482e35f28f8f3ec3c494"
+        },
+        {
+          "name": "p16",
+          "px": "2592x1944",
+          "sha256": "7b4748b12c2b0d1237a8927bc984510029fc899bb97445be2a27f37f82d88034"
+        },
+        {
+          "name": "p17",
+          "px": "2592x1944",
+          "sha256": "2d7e94f0343e54aed830669c5fc820ebb15a922f6cdbdb55a7064390db6dc15c"
+        },
+        {
+          "name": "v01",
+          "file": "20261020_203235093.mov",
+          "sha256": "3a44d98ab0421f845d619d642490ab161d40d0ae936691f446378b0a27a545e1"
+        }
+      ],
+      "note": "Hashes are of the files as received by Kairo."
+    }
+  },
+  {
+    "prev": "72fee9b0d4c48e3c4a0e34aec2d88f3013576d8733b8f24aeea683b8916c216c",
+    "hash": "0f4692529a2e52e0b7abd028bd91f31bc672eab6d4859e964f3f75fcbfd01bf2",
+    "body": {
+      "seq": 2,
+      "date": "2026-10-21",
+      "type": "Provenance entered",
+      "record": "KR-0001",
+      "source": "Artemis Gallery, lot 234 (a lot of ten spinosaurid teeth)",
+      "holder": "Kairo Supply collection, Austin, Texas",
+      "note": "Acquisition date and invoice to be attached."
+    }
+  },
+  {
+    "prev": "0f4692529a2e52e0b7abd028bd91f31bc672eab6d4859e964f3f75fcbfd01bf2",
+    "hash": "42ded66e2d6d0b31ae6cbee062bdede4bdd6d22fbf165e0ed899bb30c4c2b02a",
+    "body": {
+      "seq": 3,
+      "date": "2026-10-21",
+      "type": "Preliminary examination",
+      "record": "KR-0001",
+      "method": "Visual review of micro-images",
+      "findings_sha256": "87afc36a5c05247579748cbed4406c936b5a312428ca27cc3c01692888e5523c",
+      "note": "Hash of the record file as examined."
+    }
+  },
+  {
+    "prev": "42ded66e2d6d0b31ae6cbee062bdede4bdd6d22fbf165e0ed899bb30c4c2b02a",
+    "hash": "ede4d736010e91f387ceff3c7d20bccccf4126ed5d4b857e29a186ea12a980c4",
+    "body": {
+      "seq": 4,
+      "date": "2026-10-21",
+      "type": "Web copies published",
+      "record": "KR-0001",
+      "files": [
+        {
+          "path": "media/kr-0001/p01.jpg",
+          "sha256": "b5c510dd91d34a9d803df60c3639adc7a3fc69d5e611d54a2fa850fa6848a238"
+        },
+        {
+          "path": "media/kr-0001/p02.jpg",
+          "sha256": "baec27c7785f678e6e1cbb67e7ebe496348097833311d0a9ef96005c7aec7333"
+        },
+        {
+          "path": "media/kr-0001/p03.jpg",
+          "sha256": "d6537b7b44797ea3d427e15b274c958ce26d04dc0f6a8c4a41d922e60162cba9"
+        },
+        {
+          "path": "media/kr-0001/p04.jpg",
+          "sha256": "753d63ec71405611a8a9652a6af1a69478ea0f7d9fd1f7a5f5a5139a65e5ced4"
+        },
+        {
+          "path": "media/kr-0001/p05.jpg",
+          "sha256": "a2e2772f06ccc1284a6f4c307922a7a3ab13b625909d93db3affa84ffe4eeb55"
+        },
+        {
+          "path": "media/kr-0001/p06.jpg",
+          "sha256": "94d60af92114b7a9ed1e3314a5f57888191480de4678a31853ec0a49323e588a"
+        },
+        {
+          "path": "media/kr-0001/p07.jpg",
+          "sha256": "2747b2682148ad94b0f5b3b6a4e16ce978150a6faeee6e3740f72e28eb209f7d"
+        },
+        {
+          "path": "media/kr-0001/p08.jpg",
+          "sha256": "95b6746e908226268c7add8aee74639b511903beb6df8058aaadcb290d62e011"
+        },
+        {
+          "path": "media/kr-0001/p09.jpg",
+          "sha256": "b3452fde83d02f3d5329eee923ecd33da8ae6908a743f9d251e5f11e48c6c2e7"
+        },
+        {
+          "path": "media/kr-0001/p10.jpg",
+          "sha256": "b614da6fda62e3c142b1883282d92df0972b9365b37cb80d988bb30c6b103d9d"
+        },
+        {
+          "path": "media/kr-0001/p11.jpg",
+          "sha256": "7a9862fb4da738adb354826ae10379557fbabd1958682d0ab26f46dcdc86fbd8"
+        },
+        {
+          "path": "media/kr-0001/p12.jpg",
+          "sha256": "d352a1d5be349b5fd5cc5346eb4aadf1becf74458bbd8605b99134f549fb03b8"
+        },
+        {
+          "path": "media/kr-0001/p13.jpg",
+          "sha256": "a00106cd6b697b317a32d644cf0e76ff0f1a4a04d8a8955ed6f06ebbc60ab76c"
+        },
+        {
+          "path": "media/kr-0001/p14.jpg",
+          "sha256": "ea6402ec0adf67662edecbb1c1b2023ebfbf0618d3aa5570028236b6bad6e6c4"
+        },
+        {
+          "path": "media/kr-0001/p15.jpg",
+          "sha256": "0d46521a920f65557a3dc0ade5de2b57fa2e28e4412ff6b016374bda62f38dfe"
+        },
+        {
+          "path": "media/kr-0001/p16.jpg",
+          "sha256": "44be2eb625d3d1e6088db9afee9cd75e8268b445d80de0803fe4ef46401628f2"
+        },
+        {
+          "path": "media/kr-0001/p17.jpg",
+          "sha256": "08eb39cfb9a2b05008444b59bfaec3b4c5e506bf89651e1d76a37b22d7e833fb"
+        },
+        {
+          "path": "media/kr-0001/v01.mp4",
+          "sha256": "753a45dda15912ec78833ae9eece9a8d3df54468b375567b76ee2387b644d891"
+        }
+      ],
+      "note": "Reduced-size copies served on this page. Anyone can re-hash them."
+    }
+  }
+]

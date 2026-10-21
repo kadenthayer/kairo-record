@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+<body>
+<title>Kairo Record</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Kairo Record: a sealed, evidence-first registry for fossils and mineral specimens.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<style>
+/* Layout: a vitrine. Dark ground, objects lit from within; one deep-time ribbon carries the page, everything else is quiet catalog. */
+:root {
+  /* Color: dark-first. Strata colors are the ICS chronostratigraphic chart's own. */
+  --ground: #1E2628;      /* wet shale */
+  --raised: #263032;
+  --sunk: #172022;
+  --ink: #ECE9E1;         /* calcite */
+  --ink-2: #A9B1AD;
+  --ink-3: #7F8986;
+  --rule: #364240;
+  --accent: #9AD9DD;      /* ICS Phanerozoic */
+  --accent-ink: #14302F;
+  --natural: #A3CC9C;
+  --condition: #E0AE67;
+  --on-strata: #1E2628;
+  --zoom: rgba(154, 217, 221, 0.10);
+  /* Type */
+  --display: "Marcellus", "Trajan Pro", "Cinzel", Georgia, serif;
+  --body: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --measure: 64ch;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --ground: #E8EAE5; --raised: #F3F4F0; --sunk: #DCE0DA;
+    --ink: #1C2426; --ink-2: #4A5553; --ink-3: #66716E; --rule: #C3C9C2;
+    --accent: #1F6A72; --accent-ink: #F3F4F0;
+    --natural: #3B6F3D; --condition: #8A5610;
+    --zoom: rgba(31, 106, 114, 0.09);
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --ground: #E8EAE5; --raised: #F3F4F0; --sunk: #DCE0DA;
+  --ink: #1C2426; --ink-2: #4A5553; --ink-3: #66716E; --rule: #C3C9C2;
+  --accent: #1F6A72; --accent-ink: #F3F4F0;
+  --natural: #3B6F3D; --condition: #8A5610;
+  --zoom: rgba(31, 106, 114, 0.09);
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+img, video { max-width: 100%; height: auto; }
+html { scroll-padding-top: 5rem; }
+body {
+  margin: 0; background: var(--ground); color: var(--ink);
+  font-family: var(--body); font-size: 17px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 10; background: var(--ground);
+}
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (min-width: 720px) { .wrap { padding-left: max(32px, env(safe-area-inset-left, 0px)); padding-right: max(32px, env(safe-area-inset-right, 0px)); } }
+a { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.1; text-wrap: balance; margin: 0; letter-spacing: 0.005em; }
+h2 { font-size: clamp(1.9rem, 3.6vw, 2.75rem); }
+h3 { font-size: 1.35rem; }
+p { margin: 0; }
+.lede { color: var(--ink-2); font-size: 1.12rem; max-width: var(--measure); }
+.num { font-variant-numeric: tabular-nums; }
+.quiet { color: var(--ink-3); }
+
+/* Header */
+.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: color-mix(in srgb, var(--ground) 88%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 64px; flex-wrap: wrap; padding-block: 8px; }
+.mark { display: flex; align-items: baseline; gap: .6rem; color: var(--ink); text-decoration: none; }
+.mark b { font-family: var(--display); font-weight: 400; font-size: 1.6rem; letter-spacing: .14em; }
+.mark span { color: var(--ink-3); font-size: .9rem; }
+.nav { display: flex; gap: .25rem 1.25rem; flex-wrap: wrap; font-size: .95rem; }
+.nav a { color: var(--ink-2); text-decoration: none; padding: .25rem 0; border-bottom: 1px solid transparent; }
+.nav a:hover, .nav a[aria-current="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: .5rem; font: 500 .98rem/1 var(--body);
+  padding: .85rem 1.2rem; border-radius: 999px; border: 1px solid var(--accent);
+  background: var(--accent); color: var(--accent-ink); text-decoration: none; cursor: pointer;
+}
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--rule); }
+.btn.ghost:hover { border-color: var(--ink-3); }
+.btn:hover { filter: brightness(1.06); }
+.actions { display: flex; gap: .75rem; flex-wrap: wrap; }
+
+/* Hero */
+.hero { padding-block: clamp(3rem, 8vw, 6rem) 2rem; }
+.hero h1 { font-size: clamp(2.5rem, 6.4vw, 5.2rem); max-width: 15ch; }
+.hero .lede { margin-top: 1.5rem; }
+.hero .actions { margin-top: 2rem; }
+.ribbon-box { margin-top: clamp(2.5rem, 6vw, 4rem); overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.ribbon { display: block; width: 100%; min-width: 680px; height: auto; }
+.ribbon text { font-family: var(--body); }
+.ribbon .lbl { fill: var(--ink-2); font-size: 12px; }
+.ribbon .lbl-strong { fill: var(--ink); font-size: 13px; font-weight: 600; }
+.ribbon .in { fill: var(--on-strata); font-size: 12px; font-weight: 500; }
+.ribbon .halo { paint-order: stroke; stroke: var(--ground); stroke-width: 4px; stroke-linejoin: round; }
+.ribbon .tick { stroke: var(--ink-3); stroke-width: 1; }
+.ribbon .zoomfill { fill: var(--zoom); }
+.ribbon .zoomline { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 2 3; }
+.ribbon .pin { stroke: var(--ink); stroke-width: 1.5; }
+.ribbon .pin-dot { fill: var(--ink); }
+.ribbon .ghost { stroke: var(--ink-3); stroke-dasharray: 3 3; }
+.ribbon .ghost-dot { fill: var(--ground); stroke: var(--ink-3); stroke-width: 1.5; }
+.ribbon a:focus-visible { outline: none; }
+.ribbon a:focus-visible .pin-dot { stroke: var(--accent); stroke-width: 3; }
+.ribbon-note { color: var(--ink-3); font-size: .9rem; margin-top: .75rem; max-width: var(--measure); }
+@media (prefers-reduced-motion: no-preference) {
+  .ribbon .unfold { transform-box: fill-box; transform-origin: right center; animation: unfold 1.4s cubic-bezier(.2,.7,.1,1) .25s both; }
+  .ribbon .zoom-in { animation: fadein .9s ease .1s both; }
+  .ribbon .drop { animation: drop .7s cubic-bezier(.3,1.4,.5,1) 1.5s both; }
+  @keyframes unfold { from { transform: scaleX(.118); } to { transform: none; } }
+  @keyframes fadein { from { opacity: .2; } to { opacity: 1; } }
+  @keyframes drop { from { transform: translateY(-14px); opacity: 0; } to { transform: none; opacity: 1; } }
+}
+
+/* Sections */
+section.band { padding-block: clamp(3.5rem, 8vw, 6rem); border-top: 1px solid var(--rule); }
+.head { display: grid; gap: 1rem; margin-bottom: 2.5rem; max-width: 760px; }
+
+/* Featured */
+.feature { display: grid; gap: clamp(1.5rem, 4vw, 3.5rem); grid-template-columns: 1fr; align-items: center; }
+@media (min-width: 900px) { .feature { grid-template-columns: 1.25fr 1fr; } }
+.feature figure { margin: 0; }
+.feature img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 4px; max-width: 100%; }
+.feature figcaption { color: var(--ink-3); font-size: .88rem; margin-top: .6rem; }
+.catno { font-family: var(--display); font-size: clamp(3.4rem, 8vw, 6rem); line-height: .9; letter-spacing: .02em; color: var(--ink); }
+.feature h3 { font-size: 1.7rem; margin-top: .9rem; }
+.facts { display: grid; grid-template-columns: max-content 1fr; gap: .55rem 1.25rem; margin: 1.5rem 0 2rem; font-size: .98rem; }
+.facts dt { color: var(--ink-3); }
+.facts dd { margin: 0; min-width: 0; }
+
+/* Registry */
+.reg { width: 100%; border-collapse: collapse; font-size: .98rem; }
+.reg-box { overflow-x: auto; }
+.reg th { text-align: left; font-weight: 500; color: var(--ink-3); font-size: .88rem; padding: 0 1rem .75rem 0; border-bottom: 1px solid var(--rule); }
+.reg td { padding: 1rem 1rem 1rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.reg td:first-child { font-family: var(--display); font-size: 1.1rem; white-space: nowrap; }
+.reg tr.live td { background: linear-gradient(90deg, var(--zoom), transparent 70%); }
+.reg .sub { color: var(--ink-3); font-size: .88rem; display: block; }
+.reg-filters { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.chipbtn { font: 500 .9rem var(--body); color: var(--ink-2); background: transparent; border: 1px solid var(--rule); border-radius: 999px; padding: .4rem .9rem; cursor: pointer; }
+.chipbtn[aria-pressed="true"] { color: var(--ink); border-color: var(--accent); background: var(--zoom); }
+.state { display: inline-flex; align-items: center; gap: .45rem; font-size: .9rem; white-space: nowrap; }
+.state::before { content: ""; width: .55rem; height: .55rem; border-radius: 50%; border: 1.5px solid var(--ink-3); }
+.state.on::before { background: var(--accent); border-color: var(--accent); }
+@media (max-width: 640px) {
+  .reg thead { display: none; }
+  .reg tr { display: grid; grid-template-columns: 1fr auto; gap: .2rem 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+  .reg td { border: 0; padding: 0; }
+  .reg td.c-obj { grid-column: 1 / -1; }
+  .reg td.c-loc, .reg td.c-age { grid-column: 1 / -1; color: var(--ink-2); font-size: .92rem; }
+  .reg tr.live td { background: none; }
+}
+
+/* Process (a true sequence) */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; grid-template-columns: 1fr; counter-reset: s; }
+@media (min-width: 860px) { .steps.four { grid-template-columns: repeat(4, 1fr); } .steps.five { grid-template-columns: repeat(5, 1fr); } }
+.steps li { counter-increment: s; padding: 1.25rem 1.25rem 1.5rem 0; border-top: 2px solid var(--rule); display: grid; gap: .45rem; align-content: start; min-width: 0; }
+@media (min-width: 860px) { .steps li { padding-right: 1.5rem; } }
+.steps li::before { content: counter(s); font-family: var(--display); font-size: 1.6rem; color: var(--ink-3); line-height: 1; }
+.steps li.done { border-top-color: var(--accent); }
+.steps li.done::before, .steps li.next::before { color: var(--accent); }
+.steps li.next { border-top-color: color-mix(in srgb, var(--accent) 45%, var(--rule)); }
+.steps h4 { margin: 0; font: 600 1rem var(--body); }
+.steps p { color: var(--ink-2); font-size: .93rem; }
+.steps .when { font-size: .85rem; color: var(--ink-3); }
+.steps li.done .when { color: var(--accent); }
+
+.empty { margin-top: 3rem; padding: 2rem; border: 1px dashed var(--rule); border-radius: 6px; display: grid; gap: 1rem; max-width: 760px; }
+.split { display: grid; gap: 2.5rem; grid-template-columns: 1fr; }
+@media (min-width: 900px) { .split { grid-template-columns: 1fr 1fr; gap: 4rem; } }
+.prose { display: grid; gap: 1rem; color: var(--ink-2); max-width: var(--measure); }
+.prose strong { color: var(--ink); font-weight: 600; }
+
+/* Record view */
+.rec-head { padding-block: clamp(2.5rem, 6vw, 4.5rem) 2rem; display: grid; gap: 1.25rem; }
+.crumb { font-size: .92rem; color: var(--ink-3); }
+.crumb a { color: var(--ink-2); }
+.rec-title { display: grid; gap: .35rem; }
+.rec-title .catno { font-size: clamp(3rem, 9vw, 6.5rem); }
+.rec-title h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); color: var(--ink-2); }
+.strata-tag { display: inline-flex; align-items: center; gap: .6rem; font-size: .95rem; color: var(--ink-2); }
+.strata-tag i { width: 2.2rem; height: .7rem; border-radius: 2px; background: #B3DE53; display: inline-block; }
+
+.viewer { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+.viewer > div { min-width: 0; }
+@media (min-width: 960px) { .viewer { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); align-items: start; } }
+.stage { margin: 0; background: var(--sunk); border-radius: 6px; overflow: hidden; position: relative; }
+.stage img, .stage video { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: contain; background: var(--sunk); max-width: 100%; }
+.stage-nav { position: absolute; inset: auto 12px 12px auto; display: flex; gap: 6px; }
+.stage-nav button { width: 40px; height: 40px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--ink) 25%, transparent); background: color-mix(in srgb, var(--ground) 75%, transparent); color: var(--ink); font-size: 1.1rem; cursor: pointer; }
+.plate-info { display: grid; gap: .8rem; align-content: start; }
+.plate-no { color: var(--ink-3); font-size: .92rem; }
+.plate-info h3 { font-size: 1.8rem; }
+.plate-info p { color: var(--ink-2); max-width: 46ch; }
+.kind { display: inline-flex; align-items: center; gap: .45rem; font-size: .88rem; font-weight: 500; }
+.kind::before { content: ""; width: .6rem; height: .6rem; border-radius: 50%; background: currentColor; }
+.kind.natural { color: var(--natural); }
+.kind.condition { color: var(--condition); }
+.kind.reference { color: var(--ink-3); }
+.thumbs { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; margin-top: 1rem; }
+@media (max-width: 640px) { .thumbs { grid-template-columns: repeat(6, 72px); overflow-x: auto; padding-bottom: 6px; } }
+.thumbs button { padding: 0; border: 0; background: var(--sunk); border-radius: 3px; cursor: pointer; position: relative; aspect-ratio: 4 / 3; overflow: hidden; outline-offset: 2px; }
+.thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: .62; transition: opacity .15s; }
+.thumbs button:hover img, .thumbs button[aria-current="true"] img { opacity: 1; }
+.thumbs button[aria-current="true"] { box-shadow: 0 0 0 2px var(--accent); }
+.thumbs .tk { position: absolute; left: 4px; bottom: 4px; width: 7px; height: 7px; border-radius: 50%; }
+.thumbs .tk.natural { background: var(--natural); } .thumbs .tk.condition { background: var(--condition); } .thumbs .tk.reference { background: var(--ink-3); }
+.thumbs .play { position: absolute; inset: 0; display: grid; place-items: center; color: #fff; font-size: 1.2rem; text-shadow: 0 1px 6px rgba(0,0,0,.7); }
+.legend { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-top: .9rem; }
+
+.three { display: grid; gap: 2.5rem; grid-template-columns: 1fr; }
+@media (min-width: 900px) { .three { grid-template-columns: repeat(3, 1fr); } }
+.three h3 { margin-bottom: 1rem; display: flex; align-items: center; gap: .6rem; }
+.three ul { margin: 0; padding: 0; list-style: none; display: grid; gap: .9rem; }
+.three li { padding-left: 1.1rem; position: relative; color: var(--ink-2); font-size: .98rem; }
+.three li::before { content: ""; position: absolute; left: 0; top: .7em; width: .45rem; height: 1px; background: var(--ink-3); }
+.dot { width: .65rem; height: .65rem; border-radius: 50%; display: inline-block; }
+.dot.natural { background: var(--natural); } .dot.condition { background: var(--condition); } .dot.open { border: 1.5px solid var(--ink-3); }
+
+.conf { display: grid; gap: 0; }
+.conf-row { display: grid; grid-template-columns: 1fr; gap: .5rem; padding: 1.1rem 0; border-bottom: 1px solid var(--rule); }
+@media (min-width: 820px) { .conf-row { grid-template-columns: minmax(0, 1.3fr) 150px minmax(0, 1.4fr); gap: 1.5rem; align-items: center; } }
+.conf-row .claim { font-weight: 500; }
+.conf-row .basis { color: var(--ink-2); font-size: .94rem; }
+.meter { display: grid; gap: .3rem; }
+.meter .bars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; width: 120px; }
+.meter .bars i { height: 6px; border-radius: 1px; background: var(--rule); }
+.meter .bars i.f { background: var(--accent); }
+.meter span { font-size: .85rem; color: var(--ink-3); }
+.footnote { color: var(--ink-3); font-size: .9rem; margin-top: 1.25rem; max-width: var(--measure); }
+
+.measure-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.measure-grid div { background: var(--ground); padding: 1.1rem 1.1rem 1.25rem; display: grid; gap: .3rem; }
+@media (max-width: 640px) { .measure-grid div:last-child:nth-child(odd) { grid-column: 1 / -1; } }
+.measure-grid span { color: var(--ink-3); font-size: .88rem; }
+.measure-grid b { font-family: var(--display); font-weight: 400; font-size: 1.6rem; color: var(--ink-3); }
+
+.ledger { list-style: none; margin: 0; padding: 0; display: grid; }
+.ledger li { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr); gap: 1rem; padding: 1.25rem 0; border-bottom: 1px solid var(--rule); }
+.ledger .seq { font-family: var(--display); font-size: 1.5rem; color: var(--ink-3); line-height: 1.2; }
+.ledger .row1 { display: flex; flex-wrap: wrap; gap: .25rem 1rem; align-items: baseline; }
+.ledger .row1 b { font-weight: 600; }
+.ledger .hash { font-size: .86rem; color: var(--ink-3); overflow-wrap: anywhere; margin-top: .3rem; font-variant-numeric: tabular-nums; }
+.ledger .detail { color: var(--ink-2); font-size: .94rem; margin-top: .35rem; }
+.ledger .ok { color: var(--natural); font-size: .88rem; font-weight: 500; }
+.ledger .bad { color: var(--condition); font-size: .88rem; font-weight: 500; }
+.ledger details { margin-top: .5rem; font-size: .9rem; color: var(--ink-2); }
+.ledger summary { cursor: pointer; color: var(--accent); width: fit-content; }
+.ledger .files { margin-top: .5rem; display: grid; gap: .2rem; max-height: 220px; overflow: auto; font-variant-numeric: tabular-nums; font-size: .82rem; color: var(--ink-3); overflow-wrap: anywhere; }
+.seal { margin-top: 2rem; padding: 1.5rem; background: var(--raised); border-radius: 6px; display: grid; gap: 1rem; }
+.seal code { font-family: var(--body); font-variant-numeric: tabular-nums; font-size: .95rem; overflow-wrap: anywhere; color: var(--ink); }
+.verify-out { font-size: .95rem; color: var(--ink-2); min-height: 1.6em; }
+.verify-out .ok { color: var(--natural); font-weight: 500; }
+.verify-out .bad { color: var(--condition); font-weight: 500; }
+
+.mini { display: block; width: 100%; min-width: 620px; height: auto; }
+.mini text { font-family: var(--body); }
+
+footer { border-top: 1px solid var(--rule); padding-block: 2.5rem 3rem; color: var(--ink-3); font-size: .9rem; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; }
+
+.view[hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="#top" data-go="top" aria-label="Kairo Record home"><b>KAIRO</b><span>Record</span></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#registry" data-go="registry">Registry</a>
+      <a href="#kr-0001" data-go="kr-0001">KR-0001</a>
+      <a href="#market" data-go="market">Market</a>
+      <a href="#method" data-go="method">Method</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- HOME -->
+  <div class="view" id="view-home">
+    <section class="hero" id="top">
+      <div class="wrap">
+        <h1>A permanent record for objects from deep time</h1>
+        <p class="lede">Kairo documents fossils and mineral specimens under the microscope, states what the evidence shows and how sure we are, and seals every record so it can't be quietly changed. The goal is a vault where ownership changes hands and the object never has to.</p>
+        <div class="actions">
+          <a class="btn" href="#kr-0001" data-go="kr-0001">Open record KR-0001</a>
+          <a class="btn ghost" href="#registry" data-go="registry">Browse the registry</a>
+        </div>
+        <div class="ribbon-box" id="ribbon-box"></div>
+        <p class="ribbon-note">Earth's 4,567 million years, with the last 539 million enlarged. Colors follow the International Chronostratigraphic Chart. Pins mark objects on the registry.</p>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="feat-h">
+      <div class="wrap feature">
+        <figure>
+          <img src="media/kr-0001/p17.jpg" alt="Brown tooth enamel under magnification, crossed by a fine grid of drying cracks" width="1600" height="1200" loading="eager">
+          <figcaption>Plate 17. Drying cracks across the enamel of KR-0001, photographed 20 October 2026.</figcaption>
+        </figure>
+        <div>
+          <div class="catno">KR-0001</div>
+          <h3 id="feat-h">Spinosaurid tooth</h3>
+          <dl class="facts" id="feat-facts"></dl>
+          <a class="btn" href="#kr-0001" data-go="kr-0001">Open the full record</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="registry" aria-labelledby="reg-h">
+      <div class="wrap">
+        <div class="head">
+          <h2 id="reg-h">Registry</h2>
+          <p class="lede">Every object Kairo holds, in the order it will be documented. A number is assigned when imaging begins.</p>
+        </div>
+        <div class="reg-filters" role="group" aria-label="Filter by class">
+          <button class="chipbtn" type="button" id="f-all" data-f="all" aria-pressed="true">All</button>
+          <button class="chipbtn" type="button" id="f-fossil" data-f="Fossil" aria-pressed="false">Fossils</button>
+          <button class="chipbtn" type="button" id="f-mineral" data-f="Mineral" aria-pressed="false">Minerals</button>
+        </div>
+        <div class="reg-box">
+          <table class="reg">
+            <thead><tr><th scope="col">Number</th><th scope="col">Object</th><th scope="col">Locality</th><th scope="col">Age</th><th scope="col">Status</th></tr></thead>
+            <tbody id="reg-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="market" aria-labelledby="mkt-h">
+      <div class="wrap">
+        <div class="head">
+          <h2 id="mkt-h">The market</h2>
+          <p class="lede">Buyers see the whole record, not a sales photo. When an object sells, the buyer's name is added to its ledger and the object stays in the vault, so it never needs authenticating again.</p>
+        </div>
+        <ol class="steps four">
+          <li class="next"><h4>Documented</h4><p>Imaged, examined, measured and sealed to the Kairo standard.</p><span class="when">In progress for KR-0001</span></li>
+          <li><h4>Vaulted</h4><p>Held by Kairo at controlled humidity, insured, with every handling logged.</p><span class="when">Planned</span></li>
+          <li><h4>Listed</h4><p>Offered with its full record, confidence ratings and condition report attached.</p><span class="when">Planned</span></li>
+          <li><h4>Transferred</h4><p>Ownership moves on the ledger. The object doesn't move, and its record carries over.</p><span class="when">Planned</span></li>
+        </ol>
+        <div class="empty">
+          <h3>No objects are listed yet</h3>
+          <p class="quiet">KR-0001 becomes eligible once its condition report is issued. Follow its record to see each step land.</p>
+          <div class="actions"><a class="btn ghost" href="#kr-0001" data-go="kr-0001">Follow KR-0001</a></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="method" aria-labelledby="meth-h">
+      <div class="wrap">
+        <div class="head">
+          <h2 id="meth-h">The Kairo standard</h2>
+          <p class="lede">Five steps, in this order, for every object. A record shows which are complete.</p>
+        </div>
+        <ol class="steps five">
+          <li><h4>Micro-imaging</h4><p>Close-ups of every diagnostic surface, focus-stacked, glare controlled, scale calibrated.</p></li>
+          <li><h4>UV screening</h4><p>Filtered 365 nm light. Glue, filler and paint fluoresce differently from the original material.</p></li>
+          <li><h4>Measurement</h4><p>Dimensions to 0.01 mm and weight to 0.01 g, tying the record to the physical object.</p></li>
+          <li><h4>Overall views</h4><p>Six orientations with a forensic scale and a color reference.</p></li>
+          <li><h4>Condition report</h4><p>Findings, confidence and care notes, sealed into the ledger.</p></li>
+        </ol>
+        <div class="split" style="margin-top:3.5rem">
+          <div class="prose">
+            <h3 style="color:var(--ink)">What a record tells you</h3>
+            <p><strong>What the evidence shows, and how sure we are.</strong> Each claim carries a confidence rating and the observations behind it. Where something can't be determined from the evidence, the record says so.</p>
+            <p>A Kairo record documents identity and condition. It is not a valuation. For insurance or tax purposes, take it to a credentialed appraiser, who will find it a useful starting point.</p>
+          </div>
+          <div class="prose">
+            <h3 style="color:var(--ink)">How the seal works</h3>
+            <p>Every file is fingerprinted with SHA-256 when it arrives. Each ledger entry includes the fingerprint of the entry before it, so changing any past entry breaks every one after it.</p>
+            <p>Anyone can check this. The <a href="#kr-0001" data-go="kr-0001">record page</a> re-hashes the ledger and the published images in your browser. Anchoring the seal to a public blockchain is the next step.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- RECORD -->
+  <div class="view" id="view-record" hidden>
+    <div class="wrap rec-head">
+      <p class="crumb"><a href="#registry" data-go="registry">Registry</a> / KR-0001</p>
+      <div class="rec-title">
+        <div class="catno">KR-0001</div>
+        <h1 id="rec-h">Spinosaurid tooth</h1>
+      </div>
+      <span class="strata-tag"><i aria-hidden="true"></i><span id="rec-strata"></span></span>
+      <p class="lede" id="rec-summary"></p>
+    </div>
+
+    <section class="band" aria-labelledby="prog-h" style="border-top:0;padding-top:1rem">
+      <div class="wrap">
+        <h2 id="prog-h" style="font-size:1.5rem;margin-bottom:1.25rem">Documentation progress</h2>
+        <ol class="steps five" id="rec-steps"></ol>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="ev-h">
+      <div class="wrap">
+        <div class="head"><h2 id="ev-h">Evidence</h2><p class="lede">Seventeen plates and one video from the first imaging session. Use the arrow keys to step through them.</p></div>
+        <div class="viewer">
+          <div>
+            <figure class="stage" id="stage" tabindex="0" aria-label="Plate viewer. Use left and right arrow keys to change plates.">
+              <img id="stage-img" src="media/kr-0001/p01.jpg" alt="" width="1600" height="1200">
+              <video id="stage-vid" controls muted playsinline preload="none" poster="media/kr-0001/v01-poster.jpg" hidden><source src="media/kr-0001/v01.mp4" type="video/mp4"></video>
+              <div class="stage-nav"><button type="button" id="prev" aria-label="Previous plate">&#8249;</button><button type="button" id="next" aria-label="Next plate">&#8250;</button></div>
+            </figure>
+            <div class="thumbs" id="thumbs" role="list"></div>
+            <div class="legend"><span class="kind natural">Sign of a natural fossil</span><span class="kind condition">Condition</span><span class="kind reference">Reference frame</span></div>
+          </div>
+          <div class="plate-info" aria-live="polite">
+            <span class="plate-no" id="pl-no"></span>
+            <h3 id="pl-title"></h3>
+            <span id="pl-kind" class="kind"></span>
+            <p id="pl-text"></p>
+            <p class="quiet" style="font-size:.9rem" id="pl-meta"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="find-h">
+      <div class="wrap">
+        <div class="head"><h2 id="find-h">Findings</h2></div>
+        <div class="three">
+          <div><h3><span class="dot natural" aria-hidden="true"></span>Signs of a natural fossil</h3><ul id="f-natural"></ul></div>
+          <div><h3><span class="dot condition" aria-hidden="true"></span>Condition</h3><ul id="f-condition"></ul></div>
+          <div><h3><span class="dot open" aria-hidden="true"></span>Not yet established</h3><ul id="f-open"></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="conf-h">
+      <div class="wrap">
+        <div class="head"><h2 id="conf-h">How sure we are</h2><p class="lede">Each claim, rated on the evidence so far.</p></div>
+        <div class="conf" id="conf"></div>
+        <p class="footnote">Percentages are the examiner's judgment from images, not measured accuracy rates. Ratings will be revised after UV screening and measurement.</p>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="time-h">
+      <div class="wrap">
+        <div class="head"><h2 id="time-h">Place in time</h2><p class="lede" id="time-lede"></p></div>
+        <div class="ribbon-box" id="mini-box" style="margin-top:0"></div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="meas-h">
+      <div class="wrap">
+        <div class="head"><h2 id="meas-h">Measurements</h2><p class="lede">To be taken with calipers and a jeweler's scale in the next session.</p></div>
+        <div class="measure-grid" id="meas"></div>
+        <div class="split" style="margin-top:3rem">
+          <div class="prose"><h3 style="color:var(--ink)">Care</h3><ul id="care" style="margin:0;padding-left:1.1rem;display:grid;gap:.6rem"></ul></div>
+          <div class="prose"><h3 style="color:var(--ink)">Provenance</h3><p id="prov"></p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="led-h">
+      <div class="wrap">
+        <div class="head"><h2 id="led-h">Custody ledger</h2><p class="lede">Each entry is fingerprinted together with the one before it. Verify the chain and the published images yourself, right here.</p></div>
+        <ol class="ledger" id="ledger"></ol>
+        <div class="seal">
+          <div><span class="quiet" style="font-size:.9rem">Record seal (latest entry)</span><br><code id="seal"></code></div>
+          <div class="actions">
+            <button class="btn" type="button" id="verify">Verify this record</button>
+            <button class="btn ghost" type="button" id="copy-seal">Copy seal</button>
+          </div>
+          <p class="verify-out" id="verify-out" aria-live="polite">Not checked yet. Verification re-hashes 4 ledger entries and 18 published files in your browser.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Kairo Supply, Austin, Texas</span>
+    <span>Records and images &copy; 2026 Kairo Supply</span>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const K = {"record":{"id":"KR-0001","title":"Spinosaurid tooth","tradeName":"Sold as a Spinosaurus tooth","class":"Fossil","locality":"Kem Kem Group, southeastern Morocco","localityBasis":"Inferred from the sandstone in the pulp cavity and the auction description. To be confirmed against the invoice.","stage":"Cenomanian, Late Cretaceous","ageMa":[100.5,93.9],"ageText":"About 100 to 94 million years","source":"Artemis Gallery, lot 234 (a lot of ten spinosaurid teeth)","holder":"Kairo Supply collection, Austin, Texas","summary":"A spinosaurid tooth crown with fluted enamel and a broken base. The micro-images show several features that are hard to fake, and the condition needs attention: enamel is lifting at a crack across the crown. Whether the tooth has been repaired is not yet established.","steps":[{"name":"Micro-imaging","state":"done","date":"2026-10-20","note":"17 stills and one 30-second video, Dino-Lite AM7115MZT."},{"name":"UV screening","state":"next","note":"Filtered 365 nm light to reveal glue, filler or paint."},{"name":"Measurement and weight","state":"pending","note":"Calipers to 0.01 mm, scale to 0.01 g."},{"name":"Overall views with scale","state":"pending","note":"Six views of the whole tooth with a forensic scale."},{"name":"Condition report issued","state":"pending","note":"Sealed record, ready to share with a buyer or insurer."}],"confidence":[{"claim":"A genuine fossil, not a cast or replica","level":4,"approx":"about 90%","basis":"Enamel crazing, a sand-filled pulp cavity and manganese dendrites."},{"claim":"A spinosaurid tooth","level":4,"approx":"about 85%","basis":"Fluted enamel, its fine wrinkled texture and the shape of the base."},{"claim":"From the Kem Kem Group, Morocco","level":3,"approx":"about 75–80%","basis":"The sandstone infill matches. The invoice would make it stronger."},{"claim":"Spinosaurus aegyptiacus specifically","level":2,"approx":"not determinable","basis":"Spinosaurid species can't be told apart reliably from a single loose tooth."},{"claim":"About 100 to 94 million years old","level":3,"approx":"follows the locality","basis":"Dated by the rock unit, not by testing the tooth."},{"claim":"Free of repair or restoration","level":0,"approx":"unknown","basis":"Needs UV screening and a survey of the whole tooth."}],"findings":{"natural":["Fluted enamel with a fine wrinkled surface, typical of spinosaurid crowns.","A grid of drying cracks across the enamel, which is difficult to imitate.","Rounded, frosted sand grains cemented inside the pulp cavity, matching Kem Kem sandstone.","Branching black manganese dendrites on the dentine, which grow slowly in the ground.","Orange-brown iron staining and reddish sediment lodged in the low spots."],"condition":["Enamel is lifting beside the crack across the crown. This is the most urgent issue.","Patches of missing enamel expose the pale dentine.","The base is broken, and a crack runs across the crown.","Surface dust, mineral crust and fine white threads that may be fibers or mold."],"open":["Repair or restoration. The crack across the crown is where a glued break would sit.","Whether the tip is intact. It hasn't been imaged yet.","Exact dimensions and weight."]},"care":["Brush off dust with a soft brush or an air blower. No water or solvents yet.","Keep it at 40–50% relative humidity, with silica gel and a hygrometer in the box.","Once fully documented, stabilize the lifting enamel with a reversible conservation adhesive such as Paraloid B-72."],"measurements":[{"name":"Crown height","unit":"mm"},{"name":"Crown base length","unit":"mm"},{"name":"Crown base width","unit":"mm"},{"name":"Overall length","unit":"mm"},{"name":"Weight","unit":"g"}],"plates":[{"id":"p01","title":"Fluted enamel","kind":"natural","text":"Flutes run along the crown, with the fine wrinkled enamel texture typical of spinosaurids. The white specks are surface dust and mineral crust."},{"id":"p02","title":"Crack across the crown","kind":"condition","text":"A crack crosses the crown with a small step in the enamel. A glued break would sit here if the tooth had been repaired. UV screening will tell."},{"id":"p03","title":"Lifting enamel","kind":"condition","text":"A thin flake of enamel has lifted at the crack. Stabilize it once documentation is complete."},{"id":"p04","title":"Enamel loss, low magnification","kind":"condition","text":"Flutes run the length of the crown. A patch of enamel is missing and the pale dentine shows through."},{"id":"p05","title":"Broken base, handheld","kind":"reference","text":"A motion-blurred frame of the base, kept for completeness. Plate 6 shows the same view in focus."},{"id":"p06","title":"Broken base in section","kind":"natural","text":"The pulp cavity is packed with sand, and black dendrites mark the dentine. Both point to long burial in sandstone."},{"id":"p07","title":"Dentine surface","kind":"condition","text":"Dentine with orange iron staining. The fine white threads are probably fibers or mold. Brush gently and keep dry."},{"id":"p08","title":"Sand infill meets dentine","kind":"natural","text":"Cemented sand grains in the pulp cavity, beside manganese-stained dentine."},{"id":"p09","title":"Quartz grains","kind":"natural","text":"Rounded, frosted grains held by natural cement, consistent with the river sandstones of the Kem Kem Group."},{"id":"p10","title":"Manganese dendrites","kind":"natural","text":"Branching manganese oxide growths. They form slowly in the ground and are rarely imitated convincingly."},{"id":"p11","title":"Iron staining near the base","kind":"natural","text":"Orange-brown iron oxide staining with fine cracks through the dentine."},{"id":"p12","title":"Crazing beside a matrix patch","kind":"natural","text":"Natural crackle in the enamel, next to a patch of reddish sediment still attached."},{"id":"p13","title":"Enamel edge over dentine","kind":"condition","text":"The margin where enamel has broken away, over stained dentine."},{"id":"p14","title":"Enamel edge, second lighting","kind":"reference","text":"The same margin under warmer light, showing how deep the staining runs."},{"id":"p15","title":"Crown base with sediment","kind":"natural","text":"Dark enamel near the base, with sediment lodged in the low spots."},{"id":"p16","title":"Crown base, refocused","kind":"reference","text":"The same view at a different focal plane."},{"id":"p17","title":"Enamel crazing","kind":"natural","text":"A grid of fine drying cracks across the enamel surface."}],"video":{"id":"v01","title":"Sweep along the crack","text":"30 seconds along the crack and the lifting enamel.","captured":"2026-10-20T20:32:35-05:00","seconds":30}},"collection":[{"id":"KR-0001","title":"Spinosaurid tooth","class":"Fossil","locality":"Kem Kem Group, Morocco","age":"Cenomanian","ageMa":97,"status":"documenting","link":"kr-0001"},{"id":null,"title":"Nine spinosaurid teeth","class":"Fossil","locality":"Kem Kem Group, Morocco","age":"Cenomanian","ageMa":97,"status":"awaiting","note":"The rest of Artemis Gallery lot 234."},{"id":null,"title":"Frog carved from mammoth ivory","class":"Fossil material","locality":"To be confirmed","age":"Pleistocene","ageMa":0.05,"status":"awaiting"},{"id":null,"title":"Galena, pyrite, fluorite and calcite","class":"Mineral","locality":"Naica Mine, Chihuahua, Mexico","age":null,"status":"awaiting","note":"Next in line for documentation."},{"id":null,"title":"Colemanite","class":"Mineral","locality":"Boraxo Mine, Inyo County, California","age":null,"status":"awaiting"},{"id":null,"title":"Quartz","class":"Mineral","locality":"Sololá, Guatemala","age":null,"status":"awaiting"},{"id":null,"title":"Five mineral specimens","class":"Mineral","locality":"Localities to be recorded","age":null,"status":"awaiting"}],"ledger":[{"prev":"0000000000000000000000000000000000000000000000000000000000000000","hash":"72fee9b0d4c48e3c4a0e34aec2d88f3013576d8733b8f24aeea683b8916c216c","body":{"seq":1,"date":"2026-10-20","type":"Micro-imaging session","record":"KR-0001","instrument":"Dino-Lite AM7115MZT","files":[{"name":"p01","px":"2592x1944","sha256":"83967c1b893bb15d5bbd795f844cf4501947d95646531306b9ea19add88c010f"},{"name":"p02","px":"2592x1944","sha256":"f42fc43cbbdd25a43d8e10e297c9fc764d662e7ddb8c1620ed032a330d80108b"},{"name":"p03","px":"2592x1944","sha256":"c686872cbee12334dc2cf72755b8a0df90435b94794d9388b0071e1a17f96aab"},{"name":"p04","px":"2592x1944","sha256":"4722a59c5ae447f1688bc0d939f1db4e3dc910dd41f89fb339d1f6c14f68a076"},{"name":"p05","px":"2592x1944","sha256":"0b54114fd1fb960096a59d05055e096dc3660bf4334a3cab8cc4a651b7d574d2"},{"name":"p06","px":"2592x1944","sha256":"6ebfeff1e581ab57e178c6676cae984b9b7e2c7158704bab01385caeec114dc6"},{"name":"p07","px":"2592x1944","sha256":"98f75cbef5c20adeb6153333c4b4516d2129ee1e4cc7f9db57ddfdb38a3c912e"},{"name":"p08","px":"2592x1944","sha256":"99dd57b114798d9f48b0e4eda203fcac73a56934a4f2cd580bd802c0d2f0ca7d"},{"name":"p09","px":"2592x1944","sha256":"be6031ce098684474d4c3b4e3ad099a3cfde67a73180a10c3a13a95a9ff5cb0e"},{"name":"p10","px":"2592x1944","sha256":"862398dc513a5cef904525b3fa4fcbe5d21264d4ca7a7555cd25685fad6ea4f9"},{"name":"p11","px":"2592x1944","sha256":"e11b0d38960c76a18f6e31400a7de1a5e80fd99f737dc2ce745da3aee61bde16"},{"name":"p12","px":"2592x1944","sha256":"7600b7610a73f4649b25aca0370f48df46e658d481594448ddcc48545b766b1e"},{"name":"p13","px":"2592x1944","sha256":"3f8f24334f5cefd2773343ababc006bd02126fbe36b078093376949395ccf705"},{"name":"p14","px":"2592x1944","sha256":"5daad946d8b96ad8acb2b964d1baf640da7edbcc075f4900566353b458fbf8d4"},{"name":"p15","px":"2592x1944","sha256":"e7140af46061ace916ed0bf7d61274c31c96d4ef4606482e35f28f8f3ec3c494"},{"name":"p16","px":"2592x1944","sha256":"7b4748b12c2b0d1237a8927bc984510029fc899bb97445be2a27f37f82d88034"},{"name":"p17","px":"2592x1944","sha256":"2d7e94f0343e54aed830669c5fc820ebb15a922f6cdbdb55a7064390db6dc15c"},{"name":"v01","file":"20261020_203235093.mov","sha256":"3a44d98ab0421f845d619d642490ab161d40d0ae936691f446378b0a27a545e1"}],"note":"Hashes are of the files as received by Kairo."}},{"prev":"72fee9b0d4c48e3c4a0e34aec2d88f3013576d8733b8f24aeea683b8916c216c","hash":"0f4692529a2e52e0b7abd028bd91f31bc672eab6d4859e964f3f75fcbfd01bf2","body":{"seq":2,"date":"2026-10-21","type":"Provenance entered","record":"KR-0001","source":"Artemis Gallery, lot 234 (a lot of ten spinosaurid teeth)","holder":"Kairo Supply collection, Austin, Texas","note":"Acquisition date and invoice to be attached."}},{"prev":"0f4692529a2e52e0b7abd028bd91f31bc672eab6d4859e964f3f75fcbfd01bf2","hash":"42ded66e2d6d0b31ae6cbee062bdede4bdd6d22fbf165e0ed899bb30c4c2b02a","body":{"seq":3,"date":"2026-10-21","type":"Preliminary examination","record":"KR-0001","method":"Visual review of micro-images","findings_sha256":"87afc36a5c05247579748cbed4406c936b5a312428ca27cc3c01692888e5523c","note":"Hash of the record file as examined."}},{"prev":"42ded66e2d6d0b31ae6cbee062bdede4bdd6d22fbf165e0ed899bb30c4c2b02a","hash":"ede4d736010e91f387ceff3c7d20bccccf4126ed5d4b857e29a186ea12a980c4","body":{"seq":4,"date":"2026-10-21","type":"Web copies published","record":"KR-0001","files":[{"path":"media/kr-0001/p01.jpg","sha256":"b5c510dd91d34a9d803df60c3639adc7a3fc69d5e611d54a2fa850fa6848a238"},{"path":"media/kr-0001/p02.jpg","sha256":"baec27c7785f678e6e1cbb67e7ebe496348097833311d0a9ef96005c7aec7333"},{"path":"media/kr-0001/p03.jpg","sha256":"d6537b7b44797ea3d427e15b274c958ce26d04dc0f6a8c4a41d922e60162cba9"},{"path":"media/kr-0001/p04.jpg","sha256":"753d63ec71405611a8a9652a6af1a69478ea0f7d9fd1f7a5f5a5139a65e5ced4"},{"path":"media/kr-0001/p05.jpg","sha256":"a2e2772f06ccc1284a6f4c307922a7a3ab13b625909d93db3affa84ffe4eeb55"},{"path":"media/kr-0001/p06.jpg","sha256":"94d60af92114b7a9ed1e3314a5f57888191480de4678a31853ec0a49323e588a"},{"path":"media/kr-0001/p07.jpg","sha256":"2747b2682148ad94b0f5b3b6a4e16ce978150a6faeee6e3740f72e28eb209f7d"},{"path":"media/kr-0001/p08.jpg","sha256":"95b6746e908226268c7add8aee74639b511903beb6df8058aaadcb290d62e011"},{"path":"media/kr-0001/p09.jpg","sha256":"b3452fde83d02f3d5329eee923ecd33da8ae6908a743f9d251e5f11e48c6c2e7"},{"path":"media/kr-0001/p10.jpg","sha256":"b614da6fda62e3c142b1883282d92df0972b9365b37cb80d988bb30c6b103d9d"},{"path":"media/kr-0001/p11.jpg","sha256":"7a9862fb4da738adb354826ae10379557fbabd1958682d0ab26f46dcdc86fbd8"},{"path":"media/kr-0001/p12.jpg","sha256":"d352a1d5be349b5fd5cc5346eb4aadf1becf74458bbd8605b99134f549fb03b8"},{"path":"media/kr-0001/p13.jpg","sha256":"a00106cd6b697b317a32d644cf0e76ff0f1a4a04d8a8955ed6f06ebbc60ab76c"},{"path":"media/kr-0001/p14.jpg","sha256":"ea6402ec0adf67662edecbb1c1b2023ebfbf0618d3aa5570028236b6bad6e6c4"},{"path":"media/kr-0001/p15.jpg","sha256":"0d46521a920f65557a3dc0ade5de2b57fa2e28e4412ff6b016374bda62f38dfe"},{"path":"media/kr-0001/p16.jpg","sha256":"44be2eb625d3d1e6088db9afee9cd75e8268b445d80de0803fe4ef46401628f2"},{"path":"media/kr-0001/p17.jpg","sha256":"08eb39cfb9a2b05008444b59bfaec3b4c5e506bf89651e1d76a37b22d7e833fb"},{"path":"media/kr-0001/v01.mp4","sha256":"753a45dda15912ec78833ae9eece9a8d3df54468b375567b76ee2387b644d891"}],"note":"Reduced-size copies served on this page. Anyone can re-hash them."}}]};
+  const R = K.record;
+  const $ = (s, el = document) => el.querySelector(s);
+  const h = (tag, attrs = {}, ...kids) => {
+    const el = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "class") el.className = v; else if (k === "text") el.textContent = v; else el.setAttribute(k, v);
+    }
+    for (const c of kids) el.append(c);
+    return el;
+  };
+  const NS = "http://www.w3.org/2000/svg";
+  const s = (tag, attrs = {}, text) => {
+    const el = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+    if (text != null) el.textContent = text;
+    return el;
+  };
+
+  /* ---------- Deep-time ribbon (ICS 2023 boundaries and colors) ---------- */
+  const EONS = [
+    ["Hadean", 4567, 4031, "#AE027E"], ["Archean", 4031, 2500, "#F0047F"],
+    ["Proterozoic", 2500, 538.8, "#F73563"], ["Phanerozoic", 538.8, 0, "#9AD9DD"],
+  ];
+  const PERIODS = [
+    ["Cambrian", "Ꞓ", 538.8, 485.4, "#7FA056"], ["Ordovician", "O", 485.4, 443.8, "#009270"],
+    ["Silurian", "S", 443.8, 419.2, "#B3E1B6"], ["Devonian", "D", 419.2, 358.9, "#CB8C37"],
+    ["Carboniferous", "C", 358.9, 298.9, "#67A599"], ["Permian", "P", 298.9, 251.9, "#F04028"],
+    ["Triassic", "T", 251.9, 201.4, "#812B92"], ["Jurassic", "J", 201.4, 143.1, "#34B2C9"],
+    ["Cretaceous", "K", 143.1, 66.0, "#7FC64E"], ["Paleogene", "Pg", 66.0, 23.03, "#FD9A52"],
+    ["Neogene", "N", 23.03, 2.58, "#FFE619"], ["Quaternary", "", 2.58, 0, "#F9F97F"],
+  ];
+  const DARK_TEXT = new Set(["#AE027E", "#F0047F", "#F73563", "#009270", "#812B92"]);
+
+  function ribbon() {
+    const W = 1000, svg = s("svg", { class: "ribbon", viewBox: "0 0 1000 232", role: "img",
+      "aria-label": "Geologic time from 4,567 million years ago to today. KR-0001 sits in the Cretaceous, about 97 million years ago." });
+    const xa = (ma) => (4567 - ma) / 4567 * W;
+    const xb = (ma) => (538.8 - ma) / 538.8 * W;
+    const yA = 34, hA = 22, yB = 128, hB = 46;
+    svg.append(s("text", { x: 0, y: 20, class: "lbl" }, "4,567 million years ago"));
+    svg.append(s("text", { x: W, y: 20, class: "lbl", "text-anchor": "end" }, "Today"));
+    for (const [n, a, b, c] of EONS) {
+      const x = xa(a), w = xa(b) - x;
+      svg.append(s("rect", { x, y: yA, width: w, height: hA, fill: c }));
+      const t = s("text", { x: x + 8, y: yA + 15.5, class: "in" }, n);
+      if (DARK_TEXT.has(c)) t.setAttribute("style", "fill:#FFFFFF");
+      svg.append(t);
+    }
+    const g = s("g", { class: "zoom-in" });
+    g.append(s("polygon", { class: "zoomfill", points: `${xa(538.8)},${yA + hA} ${W},${yA + hA} ${W},${yB} 0,${yB}` }));
+    g.append(s("line", { class: "zoomline", x1: xa(538.8), y1: yA + hA, x2: 0, y2: yB }));
+    g.append(s("line", { class: "zoomline", x1: W, y1: yA + hA, x2: W, y2: yB }));
+    svg.append(g);
+    const band = s("g", { class: "unfold" });
+    for (const [n, ab, a, b, c] of PERIODS) {
+      const x = xb(a), w = xb(b) - x;
+      band.append(s("rect", { x, y: yB, width: w, height: hB, fill: c }));
+      const label = w > 84 ? n : ab;
+      if (label) {
+        const t = s("text", { x: x + w / 2, y: yB + 28, class: "in", "text-anchor": "middle" }, label);
+        if (DARK_TEXT.has(c)) t.setAttribute("style", "fill:#FFFFFF");
+        band.append(t);
+      }
+    }
+    svg.append(band);
+    for (const ma of [500, 400, 300, 200, 100, 0]) {
+      const x = xb(ma);
+      svg.append(s("line", { class: "tick", x1: x, y1: yB + hB, x2: x, y2: yB + hB + 6 }));
+      svg.append(s("text", { x: Math.min(Math.max(x, 14), W - 2), y: yB + hB + 22, class: "lbl", "text-anchor": ma === 0 ? "end" : "middle" }, ma === 0 ? "0 Ma" : ma + " Ma"));
+    }
+    // Pins
+    const kx = xb(97);
+    const pin = s("a", { href: "#kr-0001", "data-go": "kr-0001", "aria-label": "Open KR-0001, spinosaurid tooth" });
+    const pg = s("g", { class: "drop" });
+    pg.append(s("line", { class: "pin", x1: kx, y1: 100, x2: kx, y2: yB }));
+    pg.append(s("polygon", { class: "pin-dot", points: `${kx - 5},${yB - 7} ${kx + 5},${yB - 7} ${kx},${yB}` }));
+    pg.append(s("circle", { class: "pin-dot", cx: kx, cy: 100, r: 5 }));
+    pg.append(s("text", { x: kx, y: 88, class: "lbl-strong halo", "text-anchor": "middle" }, "KR-0001 Spinosaurid tooth"));
+    pin.append(pg);
+    svg.append(pin);
+    const ix = xb(0.05) - 2;
+    svg.append(s("line", { class: "ghost", x1: ix, y1: 76, x2: ix, y2: yB }));
+    svg.append(s("circle", { class: "ghost-dot", cx: ix, cy: 76, r: 4 }));
+    svg.append(s("text", { x: ix - 9, y: 72, class: "lbl halo", "text-anchor": "end" }, "Mammoth ivory, awaiting"));
+    return svg;
+  }
+
+  function miniRibbon() {
+    const STAGES = [
+      ["Early Cretaceous", "Early Cretaceous", 143.1, 100.5, "#8CCD57"], ["Cenomanian", "Cenomanian", 100.5, 93.9, "#B3DE53"],
+      ["Turonian", "Tu", 93.9, 89.8, "#BFE35D"], ["Coniacian", "Co", 89.8, 86.3, "#CCE968"],
+      ["Santonian", "Sa", 86.3, 83.6, "#D9EF74"], ["Campanian", "Campanian", 83.6, 72.1, "#E6F47F"],
+      ["Maastrichtian", "Maas.", 72.1, 66.0, "#F2FA8C"],
+    ];
+    const W = 1000, L = 143.1, Rr = 66.0, x = (ma) => (L - ma) / (L - Rr) * W;
+    const svg = s("svg", { class: "mini", viewBox: "0 0 1000 150", role: "img",
+      "aria-label": "The Cretaceous period, 143 to 66 million years ago. KR-0001 falls in the Cenomanian stage, 100.5 to 93.9 million years ago." });
+    const y = 50, hh = 44;
+    for (const [n, ab, a, b, c] of STAGES) {
+      const x0 = x(a), w = x(b) - x0;
+      svg.append(s("rect", { x: x0, y, width: w, height: hh, fill: c }));
+      svg.append(s("text", { x: x0 + w / 2, y: y + 27, "text-anchor": "middle", style: "fill:#1E2628;font-size:12px;font-weight:500" }, ab));
+    }
+    const a = x(100.5), b = x(93.9);
+    svg.append(s("rect", { x: a, y: y - 6, width: b - a, height: hh + 12, fill: "none", stroke: "var(--ink)", "stroke-width": 2 }));
+    svg.append(s("text", { x: (a + b) / 2, y: 30, "text-anchor": "middle", style: "fill:var(--ink);font-size:13px;font-weight:600" }, "KR-0001"));
+    for (const ma of [140, 120, 100, 80, 66]) {
+      const xx = x(ma);
+      svg.append(s("line", { x1: xx, y1: y + hh + 6, x2: xx, y2: y + hh + 12, stroke: "var(--ink-3)" }));
+      svg.append(s("text", { x: Math.min(xx, W - 2), y: y + hh + 30, "text-anchor": ma === 66 ? "end" : "middle", style: "fill:var(--ink-2);font-size:12px" }, ma + " Ma"));
+    }
+    svg.append(s("text", { x: W - 2, y: 30, "text-anchor": "end", style: "fill:var(--ink-3);font-size:12px" }, "End-Cretaceous extinction"));
+    return svg;
+  }
+
+  /* ---------- Home ---------- */
+  $("#ribbon-box").append(ribbon());
+  const feat = $("#feat-facts");
+  for (const [k, v] of [["Locality", R.locality], ["Age", R.ageText], ["Source", R.source], ["Status", "Documentation, step 1 of 5 complete"]]) {
+    feat.append(h("dt", { text: k }), h("dd", { text: v }));
+  }
+
+  const regBody = $("#reg-body");
+  function renderRegistry(filter) {
+    regBody.replaceChildren();
+    for (const it of K.collection) {
+      if (filter !== "all" && !(it.class === filter || (filter === "Fossil" && it.class.startsWith("Fossil")))) continue;
+      const live = it.status === "documenting";
+      const tr = h("tr", live ? { class: "live" } : {});
+      const num = h("td", { class: "c-num" });
+      if (it.link) num.append(h("a", { href: "#" + it.link, "data-go": it.link, text: it.id }));
+      else num.append(h("span", { class: "quiet", text: "Unassigned" }));
+      const obj = h("td", { class: "c-obj" }, it.title);
+      obj.append(h("span", { class: "sub", text: it.class + (it.note ? ". " + it.note : "") }));
+      tr.append(num, obj, h("td", { class: "c-loc", text: it.locality }),
+        h("td", { class: "c-age", text: it.age || "Formation age to be researched" }),
+        h("td", {}, h("span", { class: "state" + (live ? " on" : ""), text: live ? "Documenting, 1 of 5" : "Awaiting imaging" })));
+      regBody.append(tr);
+    }
+  }
+  renderRegistry("all");
+  document.querySelectorAll(".chipbtn").forEach((b) => b.addEventListener("click", () => {
+    document.querySelectorAll(".chipbtn").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    renderRegistry(b.dataset.f);
+  }));
+
+  /* ---------- Record ---------- */
+  $("#rec-strata").textContent = `${R.stage}. ${R.ageText}. ${R.locality}.`;
+  $("#rec-summary").textContent = R.summary;
+  const stepsEl = $("#rec-steps");
+  for (const st of R.steps) {
+    const li = h("li", { class: st.state === "done" ? "done" : st.state === "next" ? "next" : "" },
+      h("h4", { text: st.name }), h("p", { text: st.note }),
+      h("span", { class: "when", text: st.state === "done" ? "Complete, " + fmtDate(st.date) : st.state === "next" ? "Next" : "Pending" }));
+    stepsEl.append(li);
+  }
+  function fmtDate(d) {
+    const [y, m, dd] = d.split("-").map(Number);
+    return new Date(Date.UTC(y, m - 1, dd)).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
+  }
+
+  // Plate viewer
+  const items = [...R.plates.map((p, i) => ({ ...p, n: i + 1 })), { ...R.video, kind: "reference", isVideo: true }];
+  const KIND = { natural: "Sign of a natural fossil", condition: "Condition", reference: "Reference frame" };
+  const thumbs = $("#thumbs"), img = $("#stage-img"), vid = $("#stage-vid");
+  let cur = 0;
+  items.forEach((it, i) => {
+    const b = h("button", { type: "button", role: "listitem", "aria-label": it.isVideo ? "Video: " + it.title : `Plate ${it.n}: ${it.title}` });
+    b.append(h("img", { src: it.isVideo ? "media/kr-0001/v01-poster.jpg" : `media/kr-0001/${it.id}-t.jpg`, alt: "", loading: "lazy", width: "560", height: "420" }));
+    b.append(h("span", { class: "tk " + (it.isVideo ? "reference" : it.kind) }));
+    if (it.isVideo) b.append(h("span", { class: "play", "aria-hidden": "true", text: "▶" }));
+    b.addEventListener("click", () => show(i));
+    thumbs.append(b);
+  });
+  function show(i) {
+    cur = (i + items.length) % items.length;
+    const it = items[cur];
+    thumbs.querySelectorAll("button").forEach((b, j) => b.setAttribute("aria-current", String(j === cur)));
+    if (it.isVideo) {
+      img.hidden = true; vid.hidden = false;
+      $("#pl-no").textContent = "Video";
+      $("#pl-meta").textContent = "Captured 20 October 2026, 8:32 pm CDT. Web copy reduced to 1280 px; the original is fingerprinted in the ledger.";
+    } else {
+      vid.pause(); vid.hidden = true; img.hidden = false;
+      img.src = `media/kr-0001/${it.id}.jpg`;
+      img.alt = `Plate ${it.n}: ${it.title}`;
+      $("#pl-no").textContent = `Plate ${it.n} of ${R.plates.length}`;
+      $("#pl-meta").textContent = "Dino-Lite AM7115MZT, 2592 × 1944 original. Web copy 1600 × 1200.";
+    }
+    $("#pl-title").textContent = it.title;
+    const k = $("#pl-kind"); k.className = "kind " + it.kind; k.textContent = KIND[it.kind];
+    $("#pl-text").textContent = it.text;
+  }
+  $("#prev").addEventListener("click", () => show(cur - 1));
+  $("#next").addEventListener("click", () => show(cur + 1));
+  $("#stage").addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") { show(cur + 1); e.preventDefault(); }
+    if (e.key === "ArrowLeft") { show(cur - 1); e.preventDefault(); }
+  });
+  show(0);
+
+  for (const [id, list] of [["#f-natural", R.findings.natural], ["#f-condition", R.findings.condition], ["#f-open", R.findings.open]]) {
+    for (const t of list) $(id).append(h("li", { text: t }));
+  }
+
+  const LEVEL = { 4: "Strong", 3: "Likely", 2: "Uncertain", 1: "Weak", 0: "Not yet tested" };
+  for (const c of R.confidence) {
+    const bars = h("div", { class: "bars", "aria-hidden": "true" });
+    for (let i = 1; i <= 4; i++) bars.append(h("i", { class: i <= c.level ? "f" : "" }));
+    $("#conf").append(h("div", { class: "conf-row" },
+      h("div", { class: "claim", text: c.claim }),
+      h("div", { class: "meter" }, bars, h("span", { text: `${LEVEL[c.level]}, ${c.approx}` })),
+      h("div", { class: "basis", text: c.basis })));
+  }
+
+  $("#time-lede").textContent = "The Kem Kem beds are dated to the Cenomanian, the first stage of the Late Cretaceous. That puts this tooth about 30 million years before the end-Cretaceous extinction.";
+  $("#mini-box").append(miniRibbon());
+
+  for (const m of R.measurements) $("#meas").append(h("div", {}, h("span", { text: `${m.name} (${m.unit})` }), h("b", { text: "Pending" })));
+  for (const c of R.care) $("#care").append(h("li", { text: c }));
+  $("#prov").textContent = `Acquired from ${R.source}. Held by the ${R.holder}. ${R.localityBasis}`;
+
+  // Ledger
+  const ledgerEl = $("#ledger");
+  const short = (x) => x.slice(0, 12) + "…" + x.slice(-6);
+  K.ledger.forEach((e) => {
+    const b = e.body;
+    const li = h("li", { id: "led-" + b.seq });
+    const main = h("div", {});
+    const row = h("div", { class: "row1" }, h("b", { text: b.type }), h("span", { class: "quiet num", text: fmtDate(b.date) }), h("span", { class: "chk" }));
+    main.append(row);
+    const bits = [];
+    if (b.instrument) bits.push(b.instrument);
+    if (b.source) bits.push(b.source);
+    if (b.method) bits.push(b.method);
+    if (b.files) bits.push(`${b.files.length} files fingerprinted`);
+    if (b.note) bits.push(b.note);
+    main.append(h("p", { class: "detail", text: bits.map((x) => x.replace(/\.$/, "")).join(". ") + "." }));
+    main.append(h("div", { class: "hash", text: `Entry ${short(e.hash)}   Previous ${b.seq === 1 ? "none (first entry)" : short(e.prev)}` }));
+    if (b.files) {
+      const d = h("details", {}, h("summary", { text: "Show fingerprints" }));
+      const f = h("div", { class: "files" });
+      for (const x of b.files) f.append(h("div", { text: `${x.path || x.file || x.name}  ${x.sha256}` }));
+      d.append(f); main.append(d);
+    }
+    li.append(h("span", { class: "seq", text: String(b.seq) }), main);
+    ledgerEl.append(li);
+  });
+  const seal = K.ledger[K.ledger.length - 1].hash;
+  $("#seal").textContent = seal;
+
+  const hex = (buf) => [...new Uint8Array(buf)].map((x) => x.toString(16).padStart(2, "0")).join("");
+  const sha256 = async (data) => hex(await crypto.subtle.digest("SHA-256", typeof data === "string" ? new TextEncoder().encode(data) : data));
+  $("#verify").addEventListener("click", async () => {
+    const out = $("#verify-out");
+    if (!window.crypto || !crypto.subtle) { out.innerHTML = '<span class="bad">This browser can’t compute SHA-256 here. Open the page over https to verify.</span>'; return; }
+    out.textContent = "Checking the chain…";
+    let prev = "0".repeat(64), chainOk = true;
+    for (const e of K.ledger) {
+      const ok = e.prev === prev && (await sha256(prev + "\n" + JSON.stringify(e.body))) === e.hash;
+      const c = $("#led-" + e.body.seq + " .chk");
+      c.className = "chk " + (ok ? "ok" : "bad"); c.textContent = ok ? "Link intact" : "Link broken";
+      chainOk = chainOk && ok; prev = e.hash;
+    }
+    const files = K.ledger.flatMap((e) => e.body.files || []).filter((f) => f.path);
+    let match = 0, missing = 0, changed = [];
+    for (const f of files) {
+      out.textContent = `Chain checked. Re-hashing published files (${match + changed.length + missing + 1} of ${files.length})…`;
+      try {
+        const r = await fetch(f.path, { cache: "no-store" });
+        if (!r.ok) { missing++; continue; }
+        (await sha256(await r.arrayBuffer())) === f.sha256 ? match++ : changed.push(f.path);
+      } catch { missing++; }
+    }
+    const parts = [];
+    parts.push(chainOk ? `<span class="ok">Ledger intact.</span> All ${K.ledger.length} entries link correctly.` : `<span class="bad">Ledger broken.</span> At least one entry has been altered.`);
+    if (changed.length) parts.push(`<span class="bad">${changed.length} file${changed.length > 1 ? "s" : ""} changed</span> since sealing.`);
+    else if (match) parts.push(`<span class="ok">${match} of ${files.length} files match</span> their sealed fingerprints.`);
+    if (missing) parts.push(`${missing} file${missing > 1 ? "s" : ""} couldn’t be loaded to check.`);
+    out.innerHTML = parts.join(" ");
+  });
+  $("#copy-seal").addEventListener("click", async (ev) => {
+    const btn = ev.currentTarget;
+    try { await navigator.clipboard.writeText(seal); btn.textContent = "Seal copied"; }
+    catch { const r = document.createRange(); r.selectNodeContents($("#seal")); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); btn.textContent = "Seal selected, press copy"; }
+    setTimeout(() => (btn.textContent = "Copy seal"), 2200);
+  });
+
+  /* ---------- Views ---------- */
+  const home = $("#view-home"), rec = $("#view-record");
+  function go(token, push) {
+    const isRec = token === "kr-0001";
+    home.hidden = isRec; rec.hidden = !isRec;
+    document.querySelectorAll(".nav a").forEach((a) => a.setAttribute("aria-current", String(a.dataset.go === token)));
+    if (push) { try { history.replaceState(null, "", "#" + token); } catch {} }
+    if (isRec || token === "top") window.scrollTo(0, 0);
+    else { const t = document.getElementById(token); if (t) t.scrollIntoView(); }
+  }
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("[data-go]");
+    if (!a) return;
+    e.preventDefault();
+    go(a.dataset.go, true);
+  });
+  const start = (location.hash || "").slice(1);
+  if (["kr-0001", "registry", "market", "method"].includes(start)) go(start, false);
+})();
+</script>
+
+</body>
+</html>

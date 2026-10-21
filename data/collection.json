@@ -1,0 +1,9 @@
+[
+  { "id": "KR-0001", "title": "Spinosaurid tooth", "class": "Fossil", "locality": "Kem Kem Group, Morocco", "age": "Cenomanian", "ageMa": 97, "status": "documenting", "link": "kr-0001" },
+  { "id": null, "title": "Nine spinosaurid teeth", "class": "Fossil", "locality": "Kem Kem Group, Morocco", "age": "Cenomanian", "ageMa": 97, "status": "awaiting", "note": "The rest of Artemis Gallery lot 234." },
+  { "id": null, "title": "Frog carved from mammoth ivory", "class": "Fossil material", "locality": "To be confirmed", "age": "Pleistocene", "ageMa": 0.05, "status": "awaiting" },
+  { "id": null, "title": "Galena, pyrite, fluorite and calcite", "class": "Mineral", "locality": "Naica Mine, Chihuahua, Mexico", "age": null, "status": "awaiting", "note": "Next in line for documentation." },
+  { "id": null, "title": "Colemanite", "class": "Mineral", "locality": "Boraxo Mine, Inyo County, California", "age": null, "status": "awaiting" },
+  { "id": null, "title": "Quartz", "class": "Mineral", "locality": "Sololá, Guatemala", "age": null, "status": "awaiting" },
+  { "id": null, "title": "Five mineral specimens", "class": "Mineral", "locality": "Localities to be recorded", "age": null, "status": "awaiting" }
+]

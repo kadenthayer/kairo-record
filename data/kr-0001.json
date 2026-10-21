@@ -1,0 +1,81 @@
+{
+  "id": "KR-0001",
+  "title": "Spinosaurid tooth",
+  "tradeName": "Sold as a Spinosaurus tooth",
+  "class": "Fossil",
+  "locality": "Kem Kem Group, southeastern Morocco",
+  "localityBasis": "Inferred from the sandstone in the pulp cavity and the auction description. To be confirmed against the invoice.",
+  "stage": "Cenomanian, Late Cretaceous",
+  "ageMa": [100.5, 93.9],
+  "ageText": "About 100 to 94 million years",
+  "source": "Artemis Gallery, lot 234 (a lot of ten spinosaurid teeth)",
+  "holder": "Kairo Supply collection, Austin, Texas",
+  "summary": "A spinosaurid tooth crown with fluted enamel and a broken base. The micro-images show several features that are hard to fake, and the condition needs attention: enamel is lifting at a crack across the crown. Whether the tooth has been repaired is not yet established.",
+  "steps": [
+    { "name": "Micro-imaging", "state": "done", "date": "2026-10-20", "note": "17 stills and one 30-second video, Dino-Lite AM7115MZT." },
+    { "name": "UV screening", "state": "next", "note": "Filtered 365 nm light to reveal glue, filler or paint." },
+    { "name": "Measurement and weight", "state": "pending", "note": "Calipers to 0.01 mm, scale to 0.01 g." },
+    { "name": "Overall views with scale", "state": "pending", "note": "Six views of the whole tooth with a forensic scale." },
+    { "name": "Condition report issued", "state": "pending", "note": "Sealed record, ready to share with a buyer or insurer." }
+  ],
+  "confidence": [
+    { "claim": "A genuine fossil, not a cast or replica", "level": 4, "approx": "about 90%", "basis": "Enamel crazing, a sand-filled pulp cavity and manganese dendrites." },
+    { "claim": "A spinosaurid tooth", "level": 4, "approx": "about 85%", "basis": "Fluted enamel, its fine wrinkled texture and the shape of the base." },
+    { "claim": "From the Kem Kem Group, Morocco", "level": 3, "approx": "about 75–80%", "basis": "The sandstone infill matches. The invoice would make it stronger." },
+    { "claim": "Spinosaurus aegyptiacus specifically", "level": 2, "approx": "not determinable", "basis": "Spinosaurid species can't be told apart reliably from a single loose tooth." },
+    { "claim": "About 100 to 94 million years old", "level": 3, "approx": "follows the locality", "basis": "Dated by the rock unit, not by testing the tooth." },
+    { "claim": "Free of repair or restoration", "level": 0, "approx": "unknown", "basis": "Needs UV screening and a survey of the whole tooth." }
+  ],
+  "findings": {
+    "natural": [
+      "Fluted enamel with a fine wrinkled surface, typical of spinosaurid crowns.",
+      "A grid of drying cracks across the enamel, which is difficult to imitate.",
+      "Rounded, frosted sand grains cemented inside the pulp cavity, matching Kem Kem sandstone.",
+      "Branching black manganese dendrites on the dentine, which grow slowly in the ground.",
+      "Orange-brown iron staining and reddish sediment lodged in the low spots."
+    ],
+    "condition": [
+      "Enamel is lifting beside the crack across the crown. This is the most urgent issue.",
+      "Patches of missing enamel expose the pale dentine.",
+      "The base is broken, and a crack runs across the crown.",
+      "Surface dust, mineral crust and fine white threads that may be fibers or mold."
+    ],
+    "open": [
+      "Repair or restoration. The crack across the crown is where a glued break would sit.",
+      "Whether the tip is intact. It hasn't been imaged yet.",
+      "Exact dimensions and weight."
+    ]
+  },
+  "care": [
+    "Brush off dust with a soft brush or an air blower. No water or solvents yet.",
+    "Keep it at 40–50% relative humidity, with silica gel and a hygrometer in the box.",
+    "Once fully documented, stabilize the lifting enamel with a reversible conservation adhesive such as Paraloid B-72."
+  ],
+  "measurements": [
+    { "name": "Crown height", "unit": "mm" },
+    { "name": "Crown base length", "unit": "mm" },
+    { "name": "Crown base width", "unit": "mm" },
+    { "name": "Overall length", "unit": "mm" },
+    { "name": "Weight", "unit": "g" }
+  ],
+  "plates": [
+    { "id": "p01", "title": "Fluted enamel", "kind": "natural", "text": "Flutes run along the crown, with the fine wrinkled enamel texture typical of spinosaurids. The white specks are surface dust and mineral crust." },
+    { "id": "p02", "title": "Crack across the crown", "kind": "condition", "text": "A crack crosses the crown with a small step in the enamel. A glued break would sit here if the tooth had been repaired. UV screening will tell." },
+    { "id": "p03", "title": "Lifting enamel", "kind": "condition", "text": "A thin flake of enamel has lifted at the crack. Stabilize it once documentation is complete." },
+    { "id": "p04", "title": "Enamel loss, low magnification", "kind": "condition", "text": "Flutes run the length of the crown. A patch of enamel is missing and the pale dentine shows through." },
+    { "id": "p05", "title": "Broken base, handheld", "kind": "reference", "text": "A motion-blurred frame of the base, kept for completeness. Plate 6 shows the same view in focus." },
+    { "id": "p06", "title": "Broken base in section", "kind": "natural", "text": "The pulp cavity is packed with sand, and black dendrites mark the dentine. Both point to long burial in sandstone." },
+    { "id": "p07", "title": "Dentine surface", "kind": "condition", "text": "Dentine with orange iron staining. The fine white threads are probably fibers or mold. Brush gently and keep dry." },
+    { "id": "p08", "title": "Sand infill meets dentine", "kind": "natural", "text": "Cemented sand grains in the pulp cavity, beside manganese-stained dentine." },
+    { "id": "p09", "title": "Quartz grains", "kind": "natural", "text": "Rounded, frosted grains held by natural cement, consistent with the river sandstones of the Kem Kem Group." },
+    { "id": "p10", "title": "Manganese dendrites", "kind": "natural", "text": "Branching manganese oxide growths. They form slowly in the ground and are rarely imitated convincingly." },
+    { "id": "p11", "title": "Iron staining near the base", "kind": "natural", "text": "Orange-brown iron oxide staining with fine cracks through the dentine." },
+    { "id": "p12", "title": "Crazing beside a matrix patch", "kind": "natural", "text": "Natural crackle in the enamel, next to a patch of reddish sediment still attached." },
+    { "id": "p13", "title": "Enamel edge over dentine", "kind": "condition", "text": "The margin where enamel has broken away, over stained dentine." },
+    { "id": "p14", "title": "Enamel edge, second lighting", "kind": "reference", "text": "The same margin under warmer light, showing how deep the staining runs." },
+    { "id": "p15", "title": "Crown base with sediment", "kind": "natural", "text": "Dark enamel near the base, with sediment lodged in the low spots." },
+    { "id": "p16", "title": "Crown base, refocused", "kind": "reference", "text": "The same view at a different focal plane." },
+    { "id": "p17", "title": "Enamel crazing", "kind": "natural", "text": "A grid of fine drying cracks across the enamel surface." }
+  ],
+  "video": { "id": "v01", "title": "Sweep along the crack", "text": "30 seconds along the crack and the lifting enamel.", "captured": "2026-10-20T20:32:35-05:00", "seconds": 30 }
+}
