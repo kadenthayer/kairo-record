@@ -1,6 +1,6 @@
-# Kairo Record
+# Kairo Supply
 
-A sealed, evidence-first registry for fossils and mineral specimens, and the first piece of the Kairo vault and market.
+The site for [kairo.supply](https://kairo.supply): a sealed, evidence-first registry for fossils and mineral specimens, and the first piece of the Kairo Supply vault and market.
 
 The first record is **KR-0001**, a spinosaurid tooth from the Kem Kem Group, Morocco (Cenomanian, about 100–94 million years). It has 17 Dino-Lite plates, one video, findings, confidence ratings, and a hash-chained custody ledger that anyone can verify in the browser.
 
@@ -14,6 +14,7 @@ The first record is **KR-0001**, a spinosaurid tooth from the Kem Kem Group, Mor
 | `data/ledger.json` | The custody ledger. **Append-only. Never edit an existing entry.** |
 | `media/kr-0001/` | Web copies of the plates (1600 px), thumbnails, video and poster. |
 | `scripts/build.mjs` | Verifies the ledger and writes `index.html` and `kairo.html`. |
+| `CNAME` | Custom domain for GitHub Pages: kairo.supply. |
 | `scripts/plates-received.json` | SHA-256 of each plate as originally received (2592 × 1944 PNG). |
 
 ## Build
@@ -41,6 +42,10 @@ Add a new entry to the end of `data/ledger.json`, with `prev` set to the last en
 
 ## Wording rules
 
-- A Kairo record documents identity and condition. It is not a valuation or an appraisal.
+- A Kairo Supply record documents identity and condition. It is not a valuation or an appraisal.
 - Lead with fossils and mineral specimens. Describe minerals by their documented locality.
 - State confidence plainly, and say when something can't be determined.
+
+## Domain
+
+`CNAME` points GitHub Pages at `kairo.supply`. At the domain registrar, add four `A` records for the apex (`185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`) and a `CNAME` for `www` pointing to `kadenthayer.github.io`. Then turn on "Enforce HTTPS" in the repo's Pages settings.
